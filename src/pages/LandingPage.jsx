@@ -9,18 +9,15 @@ import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const { email } = useContext(UserContext);
-  console.log('email',email)
   const [loginClick, setLoginClick] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const data  = localStorage.getItem('userInfo');
   useEffect(() => {
-    const userInfo = localStorage.getItem('userInfo')
-    const userData = JSON.parse(userInfo)?.data
-    if (userData) {
-      navigate("/home");
+    if(data){
+      window.location.href = '/home';
     }
-  });
+  })
 
   const handleOk = () => {
     setIsModalOpen(false);

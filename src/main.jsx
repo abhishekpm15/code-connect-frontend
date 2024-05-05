@@ -6,11 +6,11 @@ import { ThemeProvider } from "@material-tailwind/react";
 import UserProvider from "./context/UserProvider";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <ThemeProvider>
       <UserProvider>
         <App />
       </UserProvider>
     </ThemeProvider>
-  </React.StrictMode>
+  // {/* </React.StrictMode> */}
 );

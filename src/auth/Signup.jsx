@@ -26,6 +26,7 @@ const Signup = ({ loginClick, setLoginClick }) => {
     setConfirmPass,
     token,
     setToken,
+    userData,
     setUserData,
   } = useContext(UserContext);
 
@@ -54,14 +55,14 @@ const Signup = ({ loginClick, setLoginClick }) => {
         name,
       })
       .then((res) => {
+        console.log('res',res)
         if (res.status === 201) {
           console.log("res", res);
           console.log(res.data.token);
-          // setToken(res.data.token)
           toast.success("Successfully registered");
           localStorage.setItem("userInfo", JSON.stringify(res));
           setUserData(true);
-          setToken(res.data.token);
+          setToken(res?.data?.token);
         }
         setTimeout(() => {
           setLoad(false);
@@ -70,8 +71,9 @@ const Signup = ({ loginClick, setLoginClick }) => {
       })
       .catch((err) => {
         console.log(err);
-        if (err.status === 400) {
+        if (err.response.status === 400) {
           toast.error(err.response.data.message);
+          setLoad(false)
         }
       });
   };

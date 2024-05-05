@@ -1,20 +1,29 @@
 import Account from "../assets/account.png";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ModeToggle } from "./mode-toggle";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button"
+import { UserContext } from "@/context/UserProvider";
 const Navbar = ({ isModalOpen, setIsModalOpen }) => {
 
   const navigate = useNavigate()
-  var userInfo = localStorage.getItem('userInfo');
-  console.log('userInfo', userInfo);
+  const data = localStorage.getItem('userInfo')
+  const [userData , setUserData] = useState(false)
+  useEffect(()=>{
+    if(data){
+      setUserData(true)
+    }
+  },[data])
+  // const {userData, setUserData} = useContext(UserContext)
+  // var userInfo = localStorage.getItem('userInfo');
+  // console.log('userInfo', userInfo);
   
-  var userData = null;
+  // var userData = null;
   
-  if (userInfo !== null) {
-    userData = JSON.parse(userInfo);
-    console.log('userData', userData);
-  }
+  // if (userInfo !== null) {
+  //   userData = JSON.parse(userInfo);
+  //   console.log('userData', userData);
+  // }
   
   
   return (
@@ -39,7 +48,7 @@ const Navbar = ({ isModalOpen, setIsModalOpen }) => {
               Chats
             </li>
             <li className="font-semibold px-2 hover:text-white duration-200 rounded-md cursor-pointer z-10 hover:scale-125">
-              <Button onClick={()=>{navigate('/addPost')}}>Add Post</Button>
+              <Button onClick={()=>{navigate('/posts')}}>Add Post</Button>
             </li>
           </ul>
           <div>
@@ -53,7 +62,7 @@ const Navbar = ({ isModalOpen, setIsModalOpen }) => {
           </div>
           {
             userData ? <div className="text-lg w-20 dark:hover:bg-white dark:hover:text-black dark:text-white text-black hover:bg-black hover:text-white px-2 duration-200 rounded-md cursor-pointer"
-            onClick={()=>{navigate('/');localStorage.removeItem('userInfo'); }}>Log out</div> :          
+            onClick={()=>{navigate('/');localStorage.removeItem('userInfo'); setUserData(false) }}>Log out</div> :          
              <div
             className="text-lg w-20 dark:hover:bg-white dark:hover:text-black dark:text-white text-black hover:bg-black hover:text-white px-2 duration-200 rounded-md cursor-pointer"
             onClick={() => {

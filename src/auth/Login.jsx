@@ -14,8 +14,15 @@ const Login = ({ loginClick, setLoginClick }) => {
   const [load, setLoad] = useState(false);
   const navigate = useNavigate();
   const URL = import.meta.env.VITE_BACKEND_URL;
-  const { email, setEmail, password, setPassword, token, userData } =
-    useContext(UserContext);
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    token,
+    userData,
+    setUserData,
+  } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +48,6 @@ const Login = ({ loginClick, setLoginClick }) => {
         if (res.status === 200) {
           toast.success("Successfully Logged in");
           localStorage.setItem("userInfo", JSON.stringify(res));
-          //   setUserData(true);
         }
         setTimeout(() => {
           setLoad(false);
