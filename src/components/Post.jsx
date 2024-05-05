@@ -31,7 +31,7 @@ const Post = ({ data }) => {
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label>Bounty Amount</Label>
-                <div>Min {data.description.bounty.min} - Max{data.description.bounty.max} ({data.description.bountyCurrency})</div>
+                <div>Min {data.description.bounty.min} - Max {data.description.bounty.max} ({data.description.bountyCurrency})</div>
               </div>
             </div>
           </form>
