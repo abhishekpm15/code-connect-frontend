@@ -15,8 +15,12 @@ import { Textarea } from "@/components/ui/textarea";
 import Bounty from "./Bounty";
 import Tags from "./Tags";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const AddPost = () => {
+  const navigate = useNavigate();
   const URL = import.meta.env.VITE_BACKEND_URL;
   const [postName, setPostName] = useState("");
   const [description, setDescription] = useState("");
@@ -31,11 +35,15 @@ const AddPost = () => {
   }, []);
 
   const handleSubmit = async (e) => {
+    if(!postName || !description || !tags || !bounty || !bountyCurrency){
+      toast.error("Please fill all the details")
+      return
+    }
     e.preventDefault();
     setLoad(true);
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiQWJoaXNoZWsiLCJlbWFpbCI6InBhYmhpc2hla21AZ21haWwuY29tIiwiaWQiOiI2NjM2NjJiMmZhNmRlZjIxYjE2OGRiN2IifSwiaWF0IjoxNzE0OTA0MDY1LCJleHAiOjE3MTc0OTYwNjV9.Tod4SPH0RfYZZt-YevJVriXMfzL_H7vs3h2goJa42JE`,
+      Authorization: `Bearer ${token}`,
     };
     await axios
       .post(
@@ -51,8 +59,11 @@ const AddPost = () => {
       )
       .then((res) => {
         console.log("post res", res);
-        toast.success();
-        setLoad(false);
+        setTimeout(() => {
+          toast.success(res.data.message);
+          setLoad(false);
+          navigate("/home");
+        }, 2000);
       })
       .catch((err) => {
         console.log("post err", err);
@@ -125,8 +136,28 @@ const AddPost = () => {
           </form>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button onClick={handleSubmit}>Deploy</Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              navigate("/home");
+            }}
+          >
+            Cancel
+          </Button>
+          {load ? (
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{
+                    fontSize: 24,
+                  }}
+                  spin
+                />
+              }
+            />
+          ) : (
+            <Button onClick={handleSubmit}>Deploy</Button>
+          )}
         </CardFooter>
       </Card>
     </div>
