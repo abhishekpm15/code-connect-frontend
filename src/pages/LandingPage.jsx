@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar";
 import Signup from "../auth/Signup";
 import { Modal } from "antd";
 import Login from "@/auth/Login";
-import { UserContext } from "@/context/UserProvider";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
@@ -39,7 +38,7 @@ const LandingPage = () => {
         </Modal>
       )}
       <Navbar isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-      <Header />
+      <Header isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
     </div>
   );
 };

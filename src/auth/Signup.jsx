@@ -61,8 +61,8 @@ const Signup = ({ loginClick, setLoginClick }) => {
           console.log(res.data.token);
           toast.success("Successfully registered");
           localStorage.setItem("userInfo", JSON.stringify(res));
-          setUserData(true);
-          setToken(res?.data?.token);
+          // setUserData(true);
+          // setToken(res?.data?.token);
         }
         setTimeout(() => {
           setLoad(false);

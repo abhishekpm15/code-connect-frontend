@@ -1,7 +1,7 @@
 import React from "react";
 import Stars from "./Stars";
 
-const Header = () => {
+const Header = ({setIsModalOpen }) => {
   return (
     <div className="w-full flex flex-col space-y-7 mt-32 font-customFont items-center">
       <Stars />
@@ -16,6 +16,9 @@ const Header = () => {
       <div>
         <button
           className="bg-[#2949ED] text-xl flex items-center mx-auto px-3 py-2 text-white rounded-md mt-10 hover:scale-125 cursor-pointer z-10 duration-300 dark:text-white "
+          onClick={() => {
+            setIsModalOpen(true);
+          }}
         >
           GET STARTED
         </button>

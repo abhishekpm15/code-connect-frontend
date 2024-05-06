@@ -10,10 +10,6 @@ const HomePage = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    console.log(posts.length);
-  }, [posts]);
-
-  useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
     const token = JSON.parse(userInfo).data.token;
@@ -40,11 +36,21 @@ const HomePage = () => {
         <Filter />
       </div>
       <div className="flex justify-evenly mt-16">
-        <div className="grid grid-cols-3 gap-5 ">
-          {posts.map((post,index) => (
-            <Post data={post} key={index}/>
-          ))}
-        </div>
+        {posts.length > 0 ? (
+          <div className="grid grid-cols-3 gap-5 ">
+            {posts?.map((post, index) => (
+              <Post data={post} key={index} />
+            ))}
+          </div>
+        ) : (<>
+        <div className="">
+          <div className="text-3xl text-center">
+            There are<span className="bg-red-400 text-black ml-2 mr-2 rounded-lg"> no posts </span>yet..
+          </div>
+          <div className="text-3xl mt-10">You will see posts when <span className="bg-green-300  text-black ml-2 mr-2 rounded-lg">you </span>or the <span className="bg-green-300 text-black ml-2 mr-2 rounded-lg">community </span>  starts posting .</div>
+          </div>
+          </>
+        )}
         <div className="flex ">
           <GlobalChat />
         </div>

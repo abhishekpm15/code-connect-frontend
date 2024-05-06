@@ -25,7 +25,7 @@ const Login = ({ loginClick, setLoginClick }) => {
   } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     setLoad(true);
     console.log(email, password);
     const headers = {

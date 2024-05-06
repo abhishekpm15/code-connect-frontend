@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { SettingOutlined } from "@ant-design/icons";
-import { Cascader, InputNumber, Select, Space } from "antd";
+import { InputNumber, Select, Space } from "antd";
 const { Option } = Select;
 
 const Bounty = ({ head, bounty, setBounty, type, bountyCurrency, setBountyCurrency }) => {

@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import PostPage from "./pages/PostPage";
+import ViewPostPage from "./pages/ViewPostPage";
 function App() {
   return (
     <div>
@@ -17,7 +18,8 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/home" element={<HomePage />} />
-              <Route path="/posts" element={<PostPage />} />
+              <Route path="/posts/create" element={<PostPage />} />
+              <Route path="/posts/:id" element={<ViewPostPage />} />
             </Route>
           </Routes>
         </Router>

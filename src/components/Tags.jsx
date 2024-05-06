@@ -19,15 +19,15 @@ const Tags = ({ tags, setTags }) => {
 
     // Backend
     "Node.js",
-    "Django (Python)",
-    "Flask (Python)",
+    "Django",
+    "Flask ",
     "Ruby on Rails",
-    "Laravel (PHP)",
-    "Express.js (Node.js framework)",
-    "Spring Boot (Java)",
-    "ASP.NET (C#)",
-    "Express (Node.js)",
-    "Flask (Python)",
+    "Laravel ",
+    "Express.js",
+    "Spring Boot",
+    "ASP.NET",
+    "Express",
+    "Flask",
 
     // Database
     "MongoDB",
