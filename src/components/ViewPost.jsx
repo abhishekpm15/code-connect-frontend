@@ -25,7 +25,6 @@ const ViewPost = ({ id }) => {
 
   const [postSelected, setPostSelected] = useState([]);
 
-
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
@@ -51,7 +50,7 @@ const ViewPost = ({ id }) => {
       .get(`${URL}/post/getPost/${id}`, { headers })
       .then((res) => {
         setPostSelected(res.data);
-        console.log(res)
+        console.log(res);
         console.log("fetch post id", res.data.savedBy);
         setSavedBy(res.data.savedBy);
       })
@@ -73,9 +72,9 @@ const ViewPost = ({ id }) => {
     axios
       .post(`${URL}/post/savePost/${id}`, {}, { headers })
       .then((res) => {
-        console.log(res)
+        console.log(res);
         console.log("fetch post id res2", res.data);
-        setSaved(true)
+        setSaved(true);
         toast.success("Post saved successfully");
         setLoad(false);
       })
@@ -96,13 +95,13 @@ const ViewPost = ({ id }) => {
   return (
     <div>
       <div className="w-full flex justify-center h-full mt-20">
-        <div
+        {/* <div
           onClick={() => {
             navigate("/home");
           }}
         >
           <ArrowLeftOutlined className="p-3 text-2xl hover:scale-150 duration-200" />
-        </div>
+        </div> */}
         <Card className="w-[700px]">
           <CardHeader>
             <div className="flex justify-between mb-1">
@@ -185,12 +184,21 @@ const ViewPost = ({ id }) => {
                 }
               />
             ) : (
-              <Button
-                onClick={handleSave}
-                className={`${saved ? "bg-blue-400" : ""}`}
-              >
-                {saved ? "Saved" : "Save"}
-              </Button>
+              <div className="flex space-x-5">
+                <Button
+                  onClick={() => {
+                    navigate("/home");
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSave}
+                  className={`${saved ? "bg-blue-400" : ""}`}
+                >
+                  {saved ? "Saved" : "Save"}
+                </Button>
+              </div>
             )}
             {load2 ? (
               <Spin

@@ -29,21 +29,35 @@ const MyPostPage = () => {
   return (
     <div>
       <Navbar />
+      {myPosts && (
+        <>
+          <div className="text-3xl font-semibold mt-10 flex justify-center w-1/2 items-center underline underline-offset-8">
+            <div>
+              Your
+              <span className="bg-blue-300 text-black ml-2 p-2 mr-2 rounded-lg underline underline-offset-8 decoration-black">
+                Posts
+              </span>
+            </div>
+          </div>
+        </>
+      )}
       <div className="flex justify-evenly mt-16">
         {myPosts.length > 0 ? (
-          <div className="grid grid-cols-3 gap-5 ">
-            {myPosts?.map((post, index) => (
-              <Post data={post} key={index} />
-            ))}
+          <div>
+            <div className="grid grid-cols-3 gap-5 ">
+              {myPosts?.map((post, index) => (
+                <Post data={post} key={index} />
+              ))}
+            </div>
           </div>
         ) : (
           <>
-            <div className="text-3xl mt-10">
+            <div className="text-3xl mt-24">
               You
-              <span className="bg-green-300  text-black ml-2 mr-2 rounded-lg">
+              <span className="bg-green-300 font-semibold text-black ml-2 mr-2 rounded-lg">
                 haven't created
               </span>
-              any posts yet ..
+              any posts yet 😔..
             </div>
           </>
         )}
