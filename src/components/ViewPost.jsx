@@ -25,6 +25,7 @@ const ViewPost = ({ id }) => {
 
   const [postSelected, setPostSelected] = useState([]);
 
+
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
@@ -50,6 +51,7 @@ const ViewPost = ({ id }) => {
       .get(`${URL}/post/getPost/${id}`, { headers })
       .then((res) => {
         setPostSelected(res.data);
+        console.log(res)
         console.log("fetch post id", res.data.savedBy);
         setSavedBy(res.data.savedBy);
       })
@@ -71,7 +73,9 @@ const ViewPost = ({ id }) => {
     axios
       .post(`${URL}/post/savePost/${id}`, {}, { headers })
       .then((res) => {
-        console.log("fetch post id", res.data.postedDetails);
+        console.log(res)
+        console.log("fetch post id res2", res.data);
+        setSaved(true)
         toast.success("Post saved successfully");
         setLoad(false);
       })

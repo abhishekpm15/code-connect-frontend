@@ -91,6 +91,7 @@ const Tags = ({ tags, setTags }) => {
         placeholder="Tags Mode"
         onChange={handleChange}
         options={options}
+        value={tags}
       />
     </div>
   );

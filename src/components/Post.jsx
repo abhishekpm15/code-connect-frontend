@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,13 +10,28 @@ import {
 } from "@/components/ui/card";
 import { Label } from "./ui/label";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Post = ({ data }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [btn, setBtn] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname === "/myposts") {
+      setBtn(true);
+    } else {
+      setBtn(false);
+    }
+  }, [location.pathname]);
 
   const handleViewPost = (id) => {
     console.log(id);
     navigate(`/posts/${id}`);
+  };
+  const handleUpdatePost = (id) => {
+    console.log(id);
+    navigate(`/posts/updatePost/${id}`);
   };
 
   return (
@@ -55,23 +70,34 @@ const Post = ({ data }) => {
               <div className="flex flex-col space-y-1.5">
                 <Label>Bounty Amount</Label>
                 <CardDescription>
-                  Min {data.description.bounty.min} - Max{" "}
-                  {data.description.bounty.max} (
-                  {data.description.bountyCurrency})
+                  Min {data?.description?.bounty?.min} - Max{" "}
+                  {data?.description?.bounty?.max} (
+                  {data?.description?.bountyCurrency})
                 </CardDescription>
               </div>
             </div>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button
-            className="w-full"
-            onClick={() => {
-              handleViewPost(data.postId);
-            }}
-          >
-            View Problem
-          </Button>
+          {btn ? (
+            <Button
+              className="w-full"
+              onClick={() => {
+                handleUpdatePost(data.postId);
+              }}
+            >
+              Update Post
+            </Button>
+          ) : (
+            <Button
+              className="w-full"
+              onClick={() => {
+                handleViewPost(data.postId);
+              }}
+            >
+              View Post
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </div>

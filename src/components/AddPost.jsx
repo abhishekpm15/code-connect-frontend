@@ -20,6 +20,7 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Switch } from "antd";
 
+
 const AddPost = () => {
   const navigate = useNavigate();
   const URL = import.meta.env.VITE_BACKEND_URL;

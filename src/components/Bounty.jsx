@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { InputNumber, Select, Space } from "antd";
 const { Option } = Select;
 
-const Bounty = ({ head, bounty, setBounty, type, bountyCurrency, setBountyCurrency }) => {
+const Bounty = ({defaultValue, head, bounty, setBounty, type, bountyCurrency, setBountyCurrency }) => {
 
   useEffect(() => {
     console.log("bounty", bounty);
@@ -48,6 +48,7 @@ const Bounty = ({ head, bounty, setBounty, type, bountyCurrency, setBountyCurren
         addonAfter={selectAfter}
         onChange={onChange}
         changeOnWheel
+        value={defaultValue}
       />
     </Space>
   );

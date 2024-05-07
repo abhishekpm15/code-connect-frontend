@@ -8,6 +8,10 @@ import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import PostPage from "./pages/PostPage";
 import ViewPostPage from "./pages/ViewPostPage";
+import ProfilePage from "./pages/ProfilePage";
+import MyPostPage from "./pages/MyPostPage";
+import SavedPostPage from "./pages/SavedPostPage";
+import UpdatePostPage from "./pages/UpdatePostPage";
 function App() {
   return (
     <div>
@@ -20,6 +24,10 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/posts/create" element={<PostPage />} />
               <Route path="/posts/:id" element={<ViewPostPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/myposts" element={<MyPostPage />} />
+              <Route path="/savedposts" element={<SavedPostPage />} />
+              <Route path="/posts/updatePost/:id" element={<UpdatePostPage />} />
             </Route>
           </Routes>
         </Router>
