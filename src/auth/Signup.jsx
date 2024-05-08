@@ -25,9 +25,6 @@ const Signup = ({ loginClick, setLoginClick }) => {
     confirmPass,
     setConfirmPass,
     token,
-    setToken,
-    userData,
-    setUserData,
   } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
@@ -59,13 +56,11 @@ const Signup = ({ loginClick, setLoginClick }) => {
         if (res.status === 201) {
           console.log("res", res);
           console.log(res.data.token);
-          toast.success("Successfully registered");
           localStorage.setItem("userInfo", JSON.stringify(res));
-          // setUserData(true);
-          // setToken(res?.data?.token);
         }
         setTimeout(() => {
           setLoad(false);
+          toast.success("Successfully registered");
           navigate("/home");
         }, 2000);
       })

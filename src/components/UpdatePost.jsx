@@ -56,7 +56,7 @@ const UpdatePost = ({ id }) => {
       .get(`${URL}/post/getPost/${id}`, { headers })
       .then((res) => {
         console.log(res)
-        setUpdatePost(res.data);
+        // setUpdatePost(res.data);
         setPostName(res.data?.description?.name);
         setDescription(res.data?.description?.message);
         setTags(res.data?.description?.tags);
@@ -124,13 +124,13 @@ const UpdatePost = ({ id }) => {
   return (
     <div>
       <div className="w-full flex justify-center h-full mt-20">
-        <div
+        {/* <div
           onClick={() => {
             navigate("/myposts");
           }}
         >
           <ArrowLeftOutlined className="p-3 text-2xl hover:scale-150 duration-200" />
-        </div>
+        </div> */}
         <Card className="w-[700px]">
           <CardHeader>
             <div className="flex items-center justify-between">

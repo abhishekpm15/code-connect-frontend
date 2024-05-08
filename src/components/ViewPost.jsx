@@ -91,18 +91,17 @@ const ViewPost = ({ id }) => {
   const handleSolve = () => {
     setLoad2(true);
   };
+  const handleLinkClick = (link) => {
+    if (!/^https?:\/\//i.test(link)) {
+      link = `http://${link}`;
+    }
+    window.open(link, '_blank');
+  };
 
   return (
     <div>
-      <div className="w-full flex justify-center h-full mt-20">
-        {/* <div
-          onClick={() => {
-            navigate("/home");
-          }}
-        >
-          <ArrowLeftOutlined className="p-3 text-2xl hover:scale-150 duration-200" />
-        </div> */}
-        <Card className="w-[700px]">
+      <div className="w-full flex justify-center h-full mt-10 px-24">
+        <Card className="w-full">
           <CardHeader>
             <div className="flex justify-between mb-1">
               <CardTitle>{postSelected.description?.name}</CardTitle>
@@ -145,7 +144,7 @@ const ViewPost = ({ id }) => {
                 </div>
                 <div className="flex flex-col space-y-1.5 ">
                   <div className="dark:text-white font-semibold text-black">
-                    Tech stacks{" "}
+                    Tech stacks
                   </div>
                   <CardDescription>
                     {postSelected.description?.tags.map((tag, index) => (
@@ -158,6 +157,53 @@ const ViewPost = ({ id }) => {
                     ))}
                   </CardDescription>
                   <div className="flex space-x-3"></div>
+                </div>
+                <div className="flex flex-col space-y-1.5 ">
+                  {postSelected?.description?.uploadedImageURL.length > 0 ? (
+                    <>
+                      <div className="dark:text-white font-semibold">
+                        Images
+                      </div>
+                      <div className="flex space-x-5">
+                        {postSelected?.description?.uploadedImageURL?.map(
+                          (image) => (
+                            <div className="">
+                              <img src={image} className="w-64" />
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="dark:text-white font-semibold text-black">
+                      No Images
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col space-y-1.5 ">
+                  {postSelected?.description?.inputs.length > 0 ? (
+                    <>
+                      <div className="dark:text-white font-semibold">
+                        URLs / Links
+                      </div>
+                      {postSelected?.description?.inputs?.map((link, index) => (
+                        <div key={index} className="bg-blue-400 w-1/5 text-black font-semibold rounded-md p-1">
+                          <a
+                            href={link}
+                            onClick={() => handleLinkClick(link)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {link}
+                          </a>
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <div className="dark:text-white font-semibold text-black">
+                      No Links
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-col space-y-1.5 ">
                   <div className="dark:text-white font-semibold">Bounty </div>
@@ -194,7 +240,7 @@ const ViewPost = ({ id }) => {
                 </Button>
                 <Button
                   onClick={handleSave}
-                  className={`${saved ? "bg-blue-400" : ""}`}
+                  className={`${saved ? "bg-blue-400 hover:bg-blue-500" : ""}`}
                 >
                   {saved ? "Saved" : "Save"}
                 </Button>

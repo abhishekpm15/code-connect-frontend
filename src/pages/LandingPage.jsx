@@ -11,12 +11,13 @@ const LandingPage = () => {
   const [loginClick, setLoginClick] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const data  = localStorage.getItem('userInfo');
   useEffect(() => {
-    if(data){
-      window.location.href = '/home';
+    const data = localStorage.getItem("userInfo");
+
+    if (data) {
+      navigate('/home')
     }
-  })
+  }, []);
 
   const handleOk = () => {
     setIsModalOpen(false);

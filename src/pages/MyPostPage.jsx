@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ViewPost from "@/components/ViewPost";
 import Post from "@/components/Post";
 const MyPostPage = () => {
   const [myPosts, setMyPosts] = useState([]);

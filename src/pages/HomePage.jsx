@@ -12,6 +12,7 @@ const HomePage = () => {
   const [screenLoad, setScreenLoad] = useState(false);
 
   useEffect(() => {
+    console.log('this page')
     setScreenLoad(true);
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
@@ -95,11 +96,11 @@ const HomePage = () => {
                 </div>
                 <div className="text-3xl mt-10 text-center">
                   You will see posts when{" "}
-                  <span className="bg-green-300  text-black ml-2 mr-2 rounded-lg">
+                  <span className="bg-emerald-300  text-black ml-2 mr-2 rounded-lg">
                     you{" "}
                   </span>
                   or the{" "}
-                  <span className="bg-green-300 text-black ml-2 mr-2 rounded-lg">
+                  <span className="bg-emerald-300 text-black ml-2 mr-2 rounded-lg">
                     community{" "}
                   </span>{" "}
                   starts posting .

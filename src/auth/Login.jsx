@@ -20,8 +20,6 @@ const Login = ({ loginClick, setLoginClick }) => {
     password,
     setPassword,
     token,
-    userData,
-    setUserData,
   } = useContext(UserContext);
 
   const handleSubmit = async (e) => {

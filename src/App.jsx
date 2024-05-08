@@ -15,7 +15,7 @@ import UpdatePostPage from "./pages/UpdatePostPage";
 function App() {
   return (
     <div>
-      <ToastContainer />
+      <ToastContainer autoClose={2000}/>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <Router>
           <Routes>
