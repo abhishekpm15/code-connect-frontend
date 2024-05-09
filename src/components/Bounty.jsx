@@ -19,7 +19,7 @@ const Bounty = ({defaultValue, head, bounty, setBounty, type, bountyCurrency, se
 
   const onSelectChange = (value) => {
     console.log('value',value)
-    setBountyCurrency(value);
+    setBountyCurrency(value === 'INR' ? '₹' : ( value === 'USD' ? '$' : (value ==='EUR' ? '€' : (value === 'GBP' ? '£' : '¥'))));
   };
 
   const selectAfter = (

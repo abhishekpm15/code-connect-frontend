@@ -68,35 +68,40 @@ const AddPost = () => {
       setUploading(false);
       return;
     }
-    if (fileList.length === 0) {
-      toast.error("Please upload images");
-      setUploading(false);
-      return;
-    }
     
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
-    try {
-      const uploadedURLs = [];
-      for (const file of fileList) {
-        const uniqueId = uuidv4();
-        const storageRef = ref(imageDB, `images/${uniqueId}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        uploadedURLs.push(downloadURL);
+    
+    let uploadedURLs = [];
+    if (fileList.length > 0) {
+      try {
+        for (const file of fileList) {
+          const uniqueId = uuidv4();
+          const storageRef = ref(imageDB, `images/${uniqueId}`);
+          const snapshot = await uploadBytes(storageRef, file);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          uploadedURLs.push(downloadURL);
+        }
+        setUploadedImageURL(uploadedURLs);
+        message.success("Upload successful.");
+      } catch (err) {
+        console.log("Error in uploading images", err);
+        setUploading(false);
+        toast.error("An error occurred while uploading images");
+        return;
       }
-      setUploadedImageURL(uploadedURLs);
-      message.success("upload successfully.");
-      
+    }
+    
+    try {
       const res = await axios.post(
         `${URL}/post/create`,
         {
           postName,
           description,
           tags,
-          uploadedImageURL: uploadedURLs, // Use uploadedURLs instead of state variable
+          uploadedImageURL: uploadedURLs,
           inputs,
           bounty,
           bountyCurrency,
@@ -104,16 +109,17 @@ const AddPost = () => {
         },
         { headers }
       );
-      console.log("post res", res);
+      console.log("Post response", res);
       toast.success(res.data.message);
       setUploading(false);
       navigate("/home");
     } catch (err) {
-      console.error("Error uploading files or creating post", err);
+      console.error("Error creating post", err);
       message.error("An error occurred while creating the post");
       setUploading(false);
     }
   };
+
   
   return (
     <div className="w-full flex justify-center mt-4 ">

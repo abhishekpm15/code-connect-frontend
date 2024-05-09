@@ -8,7 +8,7 @@ const Header = ({setIsModalOpen }) => {
       <div className="h-96 w-96 absolute left-[30%] top-[24%] bg-purple-600 rounded-full blur-3xl opacity-30 circle1 -z-20"></div>
       <div className="h-96 w-96 absolute right-[30%] bg-indigo-600 rounded-full blur-3xl opacity-30 circle2 -z-20"></div>
       <div className={`text-7xl font-semibold  dark:text-white text-black`}>
-        Code Connect
+        Code.Connect
       </div>
       <div className="text-3xl font-medium dark:text-gray-400 text-gray-600">
         Where Novices Discover Solutions and Developers Earn Bounties .

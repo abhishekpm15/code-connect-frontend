@@ -12,11 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  CreditCard,
-  Settings,
-  User
-} from "lucide-react"
+import { CreditCard, Settings, User } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Navbar = ({ setIsModalOpen }) => {
   const navigate = useNavigate();
@@ -73,15 +70,27 @@ const Navbar = ({ setIsModalOpen }) => {
               <DropdownMenuContent className="w-56">
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={()=>{navigate('/profile')}}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      navigate("/profile");
+                    }}
+                  >
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={()=>{navigate('/myposts')}}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      navigate("/myposts");
+                    }}
+                  >
                     <User className="mr-2 h-4 w-4" />
                     <span>My Posts</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={()=>{navigate('/savedposts')}}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      navigate("/savedposts");
+                    }}
+                  >
                     <User className="mr-2 h-4 w-4" />
                     <span>Saved Posts</span>
                   </DropdownMenuItem>
@@ -100,9 +109,19 @@ const Navbar = ({ setIsModalOpen }) => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-4 dark:text-white text-black font-semibold">
+        <div className="flex items-center space-x-2 dark:text-white text-black font-semibold">
           <div>
-            <img src={Account} alt="" className="w-7"></img>
+            {userData ? (
+              <Avatar className="ml-2 mr-2 w-10 h-10">
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="@shadcn"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            ) : (
+              <img src={Account} className="w-10 h-10"/>
+            )}
           </div>
           {userData ? (
             <div

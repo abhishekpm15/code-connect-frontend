@@ -12,6 +12,7 @@ import ProfilePage from "./pages/ProfilePage";
 import MyPostPage from "./pages/MyPostPage";
 import SavedPostPage from "./pages/SavedPostPage";
 import UpdatePostPage from "./pages/UpdatePostPage";
+import NotFoundPage from "./pages/NotFoundPage";
 function App() {
   return (
     <div>
@@ -28,6 +29,7 @@ function App() {
               <Route path="/myposts" element={<MyPostPage />} />
               <Route path="/savedposts" element={<SavedPostPage />} />
               <Route path="/posts/updatePost/:id" element={<UpdatePostPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
         </Router>

@@ -36,7 +36,8 @@ const Post = ({ data }) => {
 
   return (
     <div className="">
-      <Card className="w-[350px] hover:scale-105 duration-200 ">
+      <Card className="w-[350px] hover:scale-105 hover:shadow-lg duration-200 border-black/20
+       dark:border-white/10 shadow-md shadow-black dark:shadow-white/20 ">
         <CardHeader>
           <div className="flex items-center">
             <div className="flex">Status : {data.status}</div>
@@ -59,11 +60,11 @@ const Post = ({ data }) => {
         <CardContent>
           <form>
             <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5 text-ellipsis h-11  w-full  overflow-hidden">
+              <div className="flex flex-col space-y-1.5 text-ellipsis h-14 w-full  overflow-hidden">
                 <Label>Tech Stacks :</Label>
                 <CardDescription className="flex space-x-3">
                   {data.description.tags.map((tag, index) => (
-                    <div key={index}>{tag}</div>
+                    <div className="bg-green-300 text-black font-semibold rounded-md px-2 py-1" key={index}>{tag}</div>
                   ))}
                 </CardDescription>
               </div>
