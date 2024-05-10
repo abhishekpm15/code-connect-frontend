@@ -44,12 +44,12 @@ const Login = ({ loginClick, setLoginClick }) => {
       .then((res) => {
         console.log("res", res);
         if (res.status === 200) {
-          toast.success("Successfully Logged in");
           localStorage.setItem("userInfo", JSON.stringify(res));
         }
         setTimeout(() => {
           setLoad(false);
           navigate("/home");
+          toast.success("Successfully Logged in");
         }, 2000);
       })
       .catch((err) => {

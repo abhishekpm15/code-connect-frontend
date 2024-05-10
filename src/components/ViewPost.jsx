@@ -13,7 +13,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Skeletons from "./Skeletons";
 
 const ViewPost = ({ id }) => {
@@ -25,6 +25,7 @@ const ViewPost = ({ id }) => {
   const URL = import.meta.env.VITE_BACKEND_URL;
   const [screenLoad, setScreenLoad] = useState(false);
   const [postSelected, setPostSelected] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     // setScreenLoad(true);
@@ -269,7 +270,9 @@ const ViewPost = ({ id }) => {
                 <div className="flex space-x-5">
                   <Button
                     onClick={() => {
-                      navigate("/home");
+                      if (location.pathname.startsWith("/posts"))
+                        navigate("/savedposts");
+                      else navigate("/home");
                     }}
                   >
                     Cancel

@@ -38,14 +38,12 @@ const HomePage = () => {
     <div>
       {screenLoad ? (
         <>
-          <Navbar />
           <Skeletons />
         </>
       ) : (
         <>
           {!screenLoad && posts.length > 0 && (
             <>
-              <Navbar />
               <div className=" mt-14 pl-44">
                 <Filter />
               </div>
@@ -63,7 +61,6 @@ const HomePage = () => {
           )}
           {!screenLoad && posts.length === 0 && (
             <div className="">
-              <Navbar />
               <div className="flex flex-col justify-center mt-24">
                 <div className="text-3xl font-semibold text-center ">
                   There are

@@ -8,7 +8,6 @@ const ViewPostPage = () => {
   console.log(id)
   return (
     <div>
-      <Navbar />
       <ViewPost id={id}/>
     </div>
   );

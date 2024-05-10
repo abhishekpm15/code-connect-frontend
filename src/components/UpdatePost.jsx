@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { ArrowLeftOutlined, LoadingOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
+import { Modal, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Switch } from "antd";
 import { Input } from "./ui/input";
@@ -25,12 +25,12 @@ const UpdatePost = ({ id }) => {
   const [load, setLoad] = useState(false);
   const URL = import.meta.env.VITE_BACKEND_URL;
   const [postName, setPostName] = useState("");
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [isSwitchOn, setIsSwitchOn] = useState(null);
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [bounty, setBounty] = useState({ min: 10, max: 10 });
   const [bountyCurrency, setBountyCurrency] = useState("INR");
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     console.log(
@@ -39,12 +39,13 @@ const UpdatePost = ({ id }) => {
       postName,
       tags,
       bounty.min,
-      bounty.max
+      bounty.max,
+      isSwitchOn
     );
   }, [tags, setTags]);
 
   useEffect(() => {
-    console.log("page")
+    console.log("page");
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
     const token = JSON.parse(userInfo).data.token;
@@ -55,7 +56,7 @@ const UpdatePost = ({ id }) => {
     axios
       .get(`${URL}/post/getPost/${id}`, { headers })
       .then((res) => {
-        console.log(res)
+        console.log(res);
         // setUpdatePost(res.data);
         setPostName(res.data?.description?.name);
         setDescription(res.data?.description?.message);
@@ -66,6 +67,7 @@ const UpdatePost = ({ id }) => {
           max: res.data?.description?.bounty.max,
         });
         console.log("bounty", res.data?.description?.bounty.min);
+        setIsSwitchOn(res.data?.status === "open" ? true : false);
         console.log(res);
       })
       .catch((err) => {
@@ -74,15 +76,18 @@ const UpdatePost = ({ id }) => {
   }, []);
 
   const onChange = (checked) => {
+    setIsSwitchOn(checked);
+    if (checked === false) {
+      setIsModalOpen(true);
+    }
     console.log(`switch to ${checked}`);
-    setIsSwitchOn(!isSwitchOn);
   };
 
   const handleUpdate = async (e) => {
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
     const token = JSON.parse(userInfo).data.token;
-    const status = isSwitchOn ? "closed" : "open";
+    const status = isSwitchOn ? "open" : "closed";
     console.log(status);
     e.preventDefault();
     if (!postName || !description || !tags || !bounty || !bountyCurrency) {
@@ -94,53 +99,83 @@ const UpdatePost = ({ id }) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
-    try {
-      const res = await axios.post(
-        `${URL}/post/updatePost/${id}`,
-        {
-          postName,
-          description,
-          tags,
-          bounty,
-          bountyCurrency,
-          status,
-        },
-        { headers }
-      );
-      console.log("post res", res);
-      setTimeout(() => {
-        toast.success(res.data);
+
+    if (!isSwitchOn) {
+      try {
+        const res = await axios.post(
+          `${URL}/post/deletePost/${id}`,
+          {},
+          { headers }
+        );
+        console.log("post res delete", res);
+        setTimeout(() => {
+          toast.success(res.data.message);
+          setLoad(false);
+          navigate("/myposts");
+        }, 2000);
+      } catch (err) {
+        console.log("post err delete", err);
+        console.log("could not delete post");
+        toast.error("An error occurred while deleting the post");
         setLoad(false);
-        navigate("/myposts");
-      }, 2000);
-    } catch (err) {
-      console.log("post err", err);
-      console.log("could not create post");
-      toast.error("An error occurred while creating the post");
-      setLoad(false);
+      }
+    } else {
+      try {
+        const res = await axios.post(
+          `${URL}/post/updatePost/${id}`,
+          {
+            postName,
+            description,
+            tags,
+            bounty,
+            bountyCurrency,
+            status,
+          },
+          { headers }
+        );
+        console.log("post res update", res);
+        setTimeout(() => {
+          toast.success(res.data);
+          setLoad(false);
+          navigate("/myposts");
+        }, 2000);
+      } catch (err) {
+        console.log("post err update", err);
+        console.log("could not create post");
+        toast.error("An error occurred while creating the post");
+        setLoad(false);
+      }
     }
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
 
   return (
     <div>
+      <Modal open={isModalOpen} onOk={handleOk}>
+        <div className="font-semibold text-2xl mb-3">Are you sure ?</div>
+        <div className="text-xl">
+          If post status is closed, then it gets deleted !{" "}
+        </div>
+      </Modal>
       <div className="w-full flex justify-center h-full mt-20">
-        {/* <div
-          onClick={() => {
-            navigate("/myposts");
-          }}
-        >
-          <ArrowLeftOutlined className="p-3 text-2xl hover:scale-150 duration-200" />
-        </div> */}
-        <Card className="w-[700px]">
+        <Card className="w-[1000px]">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Edit Post</CardTitle>
               <CardDescription className="flex font-semibold text-lg mr-5 items-center">
                 <div className="flex items-center">
                   <div className="mr-3">Status:</div>
-                  <Switch defaultChecked onChange={onChange} />
+                  <Switch defaultValue={isSwitchOn} onChange={onChange} />
                   <Label htmlFor="airplane-mode" className="w-5 ml-3">
-                    {isSwitchOn ? "closed" : "open"}
+                    {isSwitchOn ? "open" : "closed"}
+                    {console.log(isSwitchOn)}
                   </Label>
                 </div>
               </CardDescription>
@@ -189,7 +224,7 @@ const UpdatePost = ({ id }) => {
                       head={"Minimum"}
                       bounty={bounty}
                       setBounty={setBounty}
-                      defaultValue={bounty.min }
+                      defaultValue={bounty.min}
                       type="min"
                       bountyCurrency={bountyCurrency}
                       setBountyCurrency={setBountyCurrency}
@@ -198,7 +233,7 @@ const UpdatePost = ({ id }) => {
                       head={"Maximum"}
                       bounty={bounty}
                       setBounty={setBounty}
-                      defaultValue={bounty.max }
+                      defaultValue={bounty.max}
                       type="max"
                       bountyCurrency={bountyCurrency}
                       setBountyCurrency={setBountyCurrency}

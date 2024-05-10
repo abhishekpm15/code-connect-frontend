@@ -35,13 +35,11 @@ const MyPostPage = () => {
     <div>
       {screenLoad ? (
         <>
-          <Navbar />
           <Skeletons />
         </>
       ) : (
         <>
-          <Navbar />
-          {myPosts && (
+          {myPosts.length > 0 && (
             <>
               <div className="text-3xl font-semibold mt-16 flex justify-center w-1/2 items-center underline underline-offset-8">
                 <div>
@@ -64,7 +62,7 @@ const MyPostPage = () => {
               </div>
             ) : (
               <>
-                <div className="text-3xl mt-10 font-semibold">
+                <div className="text-3xl mt-16 font-semibold">
                   You
                   <span className="bg-green-300 font-semibold text-black ml-2 mr-2 rounded-lg px-3 py-1">
                     haven't created

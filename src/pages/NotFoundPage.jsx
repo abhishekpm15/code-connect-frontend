@@ -4,7 +4,6 @@ import PageNotFound from "../assets/page-not-found.svg"
 const NotFoundPage = () => {
   return (
     <div>
-      <Navbar />
       <div className="flex justify-center mt-28">
         <img src={PageNotFound} className="w-[600px]"/>
       </div>

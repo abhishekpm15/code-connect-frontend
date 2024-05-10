@@ -3,8 +3,8 @@ import React from "react";
 
 const ProfilePage = () => {
   return (
-    <div>
-      <Navbar />
+    <div className="w-full flex justify-center mt-20">
+      Profile page
     </div>
   );
 };

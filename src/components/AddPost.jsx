@@ -33,7 +33,7 @@ const AddPost = () => {
   const [uploadedImageURL, setUploadedImageURL] = useState([]);
   const [inputs, setInputs] = useState([""]);
   const [postName, setPostName] = useState("");
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [isSwitchOn, setIsSwitchOn] = useState(true);
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [bounty, setBounty] = useState({ min: 10, max: 10 });
@@ -44,7 +44,7 @@ const AddPost = () => {
 
   const onChange = (checked) => {
     console.log(`switch to ${checked}`);
-    setIsSwitchOn(!isSwitchOn);
+    setIsSwitchOn(checked);
   };
 
   useEffect(() => {
@@ -62,6 +62,11 @@ const AddPost = () => {
   
   const handleSubmit = async (e) => {
     setUploading(true);
+    if(!isSwitchOn){
+      toast.error("Post status should be open !")
+      setUploading(false)
+      return;
+    }
     e.preventDefault();
     if (!postName || !description || !tags || !bounty || !bountyCurrency) {
       toast.error("Please fill all the details");
@@ -105,7 +110,7 @@ const AddPost = () => {
           inputs,
           bounty,
           bountyCurrency,
-          status: isSwitchOn ? "closed" : "open",
+          status: isSwitchOn ? "open" : "closed",
         },
         { headers }
       );
@@ -132,7 +137,7 @@ const AddPost = () => {
                 <div className="mr-3">Status:</div>
                 <Switch defaultChecked onChange={onChange} />
                 <Label htmlFor="airplane-mode" className="w-5 ml-3">
-                  {isSwitchOn ? "closed" : "open"}
+                  {isSwitchOn ? "open" : "closed"}
                 </Label>
               </div>
             </CardDescription>
