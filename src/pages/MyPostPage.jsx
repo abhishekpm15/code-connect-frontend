@@ -4,6 +4,7 @@ import axios from "axios";
 import Post from "@/components/Post";
 import NoData from "../assets/no-data.svg";
 import Skeletons from "@/components/Skeletons";
+
 const MyPostPage = () => {
   const [myPosts, setMyPosts] = useState([]);
   const URL = import.meta.env.VITE_BACKEND_URL;
