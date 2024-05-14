@@ -1,0 +1,23 @@
+@keyframes revolve {
+    0% {
+        transform: rotate(0deg) translateX(100px) rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg) translateX(100px) rotate(-360deg);
+      }
+}
+@keyframes revolve-opposite {
+  0% {
+      transform: rotate(0deg) translateX(-100px) rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg) translateX(-100px) rotate(-360deg);
+    }
+}
+
+.circle1 {
+  animation: revolve 10s linear infinite;
+}
+.circle2 {
+    animation: revolve-opposite 10s linear infinite;
+}

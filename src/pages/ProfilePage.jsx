@@ -42,13 +42,13 @@ const ProfilePage = () => {
           <div className="text-2xl font-semibold mt-5 w-72">
             {profile.username}
           </div>
-          <div className="text-xl font-semibold mt-3 w-72 text-white/55">
+          <div className="text-xl font-semibold mt-3 w-72 dark:text-white/55 text-black/55 ">
             {profile.email}
           </div>
         </div>
         <div className="">
           <div className="">
-            <Profile username={profile.username} email = {profile.email}/>
+            <Profile username={profile.username} email = {profile.email} techStacks={profile.techStack} websiteLinks = {profile.websiteLinks} bio = {profile.bio} socialLinks={profile.socialLinks}/>
           </div>
         </div>
       </div>

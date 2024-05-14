@@ -5,6 +5,7 @@ import Signup from "../auth/Signup";
 import { Modal } from "antd";
 import Login from "@/auth/Login";
 import { useNavigate } from "react-router-dom";
+import LearnMorePage from "./LearnMorePage";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -13,9 +14,8 @@ const LandingPage = () => {
 
   useEffect(() => {
     const data = localStorage.getItem("userInfo");
-
     if (data) {
-      navigate('/home')
+      navigate("/home");
     }
   }, []);
 
@@ -39,7 +39,13 @@ const LandingPage = () => {
         </Modal>
       )}
       <Navbar isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-      <Header isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <section className="h-screen  relative first-section ">
+        <Header isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      </section>
+      <section className="h-screen relative" id="second-section">
+        <LearnMorePage />
+      </section>
+      <section className="h-screen relative" id="third-section"></section>
     </div>
   );
 };

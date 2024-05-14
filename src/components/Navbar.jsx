@@ -27,7 +27,7 @@ const Navbar = ({ setIsModalOpen }) => {
   }, [data]);
 
   return (
-    <div className="w-full text-xl mt-4 z-10">
+    <div className="w-full text-xl mt-4 z-10 sticky top-0 ">
       <div className="w-full flex justify-around items-center rounded-3xl p-2">
         <div>
           <img
