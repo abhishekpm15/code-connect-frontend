@@ -42,7 +42,7 @@ const MyPostPage = () => {
         <>
           {myPosts.length > 0 && (
             <>
-              <div className="text-3xl font-semibold mt-16 flex justify-center w-1/2 items-center underline underline-offset-8">
+              <div className="text-3xl font-semibold mt-16 flex justify-center w-1/2 items-center underline underline-offset-8 ml-6">
                 <div>
                   Your
                   <span className="bg-blue-300 text-black ml-2 p-2 mr-2 rounded-lg underline underline-offset-8 decoration-black">

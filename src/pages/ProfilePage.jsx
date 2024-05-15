@@ -31,7 +31,7 @@ const ProfilePage = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full flex mt-20 justify-center space-x-24">
+      <div className="w-full flex mt-10 justify-center space-x-24">
         <div className="flex flex-col items-center">
           <div className="flex justify-center">
             <Avatar className="w-72 h-72">
@@ -47,9 +47,7 @@ const ProfilePage = () => {
           </div>
         </div>
         <div className="">
-          <div className="">
             <Profile username={profile.username} email = {profile.email} techStacks={profile.techStack} websiteLinks = {profile.websiteLinks} bio = {profile.bio} socialLinks={profile.socialLinks}/>
-          </div>
         </div>
       </div>
     </div>

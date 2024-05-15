@@ -37,7 +37,7 @@ const Post = ({ data }) => {
   return (
     <div className="">
       <Card className="w-[350px] hover:scale-105 hover:shadow-lg duration-200 border-black/20
-       dark:border-white/10 shadow-md shadow-black dark:shadow-white/20 ">
+        shadow-md shadow-black dark:shadow-white/30 ">
         <CardHeader>
           <div className="flex items-center">
             <div className="flex">Status : {data.status}</div>
