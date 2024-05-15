@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Void from "../assets/void.svg";
 import Skeletons from "@/components/Skeletons";
+import Background from "@/components/Background";
 
 const HomePage = () => {
   const URL = import.meta.env.VITE_BACKEND_URL;
@@ -36,11 +37,8 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="">
-      <div className="overflow-hidden">
-        <div className="h-[700px] w-[700px] absolute  left-[17%] top-[10%] bg-purple-700 rounded-full blur-3xl dark:opacity-20 opacity-30 -z-20 overflow-hidden"></div>
-        <div className="h-[700px] w-[700px] absolute  right-[17%] bg-indigo-600 rounded-full blur-3xl dark:opacity-20 -z-40 opacity-30 overflow-hidden"></div>
-      </div>
+    <Background>
+    <div className="w-full pb-40">
       {screenLoad ? (
         <>
           <Skeletons />
@@ -53,12 +51,12 @@ const HomePage = () => {
                 <Filter />
               </div>
               <div className="flex justify-evenly mt-16">
-                <div className="grid grid-cols-3 gap-5 ">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-5 gap-y-7 ">
                   {posts?.map((post, index) => (
                     <Post data={post} key={index} />
                   ))}
                 </div>
-                <div className="flex ">
+                <div className="sm:block hidden">
                   <GlobalChat />
                 </div>
               </div>
@@ -94,6 +92,7 @@ const HomePage = () => {
         </>
       )}
     </div>
+    </Background>
   );
 };
 

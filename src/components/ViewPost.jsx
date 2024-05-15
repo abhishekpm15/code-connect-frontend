@@ -133,7 +133,7 @@ const ViewPost = ({ id }) => {
         </>
       ) : (
         <div className="w-full flex justify-center h-full mt-10 px-24">
-          <Card className="w-[1200px]">
+          <Card className="w-[1200px] border-black/30 shadow-2xl dark:border-white/30">
             <CardHeader>
               <div className="flex justify-between mb-1">
                 <CardTitle>{postSelected.description?.name}</CardTitle>

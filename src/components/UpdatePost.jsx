@@ -42,7 +42,7 @@ const UpdatePost = ({ id }) => {
       bounty.max,
       isSwitchOn
     );
-  }, [tags, setTags]);
+  }, [tags, setTags, isSwitchOn, setIsSwitchOn]);
 
   useEffect(() => {
     console.log("page");
@@ -172,7 +172,7 @@ const UpdatePost = ({ id }) => {
               <CardDescription className="flex font-semibold text-lg mr-5 items-center">
                 <div className="flex items-center">
                   <div className="mr-3">Status:</div>
-                  <Switch defaultValue={isSwitchOn} onChange={onChange} />
+                  <Switch defaultValue={`${isSwitchOn}`} onChange={onChange} />
                   <Label htmlFor="airplane-mode" className="w-5 ml-3">
                     {isSwitchOn ? "open" : "closed"}
                     {console.log(isSwitchOn)}
