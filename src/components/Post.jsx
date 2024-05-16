@@ -11,6 +11,8 @@ import {
 import { Label } from "./ui/label";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import LikeFilled from "../assets/likeFilled.png";
+import LikeUnfilled from "../assets/likeUnfilled.png";
 
 const Post = ({ data }) => {
   const navigate = useNavigate();
@@ -36,8 +38,10 @@ const Post = ({ data }) => {
 
   return (
     <div className="">
-      <Card className="dark:bg-transparent w-[350px] hover:scale-105 hover:shadow-lg duration-200 border-black/20
-        shadow-md shadow-black dark:shadow-white/30 dark:border-white/20">
+      <Card
+        className="dark:bg-transparent w-[350px] hover:scale-105 hover:shadow-lg duration-200 border-black/20
+        shadow-md shadow-black dark:shadow-white/30 dark:border-white/20"
+      >
         <CardHeader>
           <div className="flex items-center">
             <div className="flex">Status : {data.status}</div>
@@ -64,16 +68,27 @@ const Post = ({ data }) => {
                 <Label>Tech Stacks :</Label>
                 <CardDescription className="flex space-x-3">
                   {data.description.tags.map((tag, index) => (
-                    <div className="bg-green-300 text-black font-semibold rounded-md px-2 py-1" key={index}>{tag}</div>
+                    <div
+                      className="bg-green-300 text-black font-semibold rounded-md px-2 py-1"
+                      key={index}
+                    >
+                      {tag}
+                    </div>
                   ))}
                 </CardDescription>
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label>Bounty Amount</Label>
-                <CardDescription>
-                  Min {data?.description?.bounty?.min} - Max{" "}
-                  {data?.description?.bounty?.max} (
-                  {data?.description?.bountyCurrency})
+                <CardDescription className="flex justify-between">
+                  <div>
+                    Min {data?.description?.bounty?.min} - Max{" "}
+                    {data?.description?.bounty?.max} (
+                    {data?.description?.bountyCurrency})
+                  </div>
+                  <div className="flex gap-2">
+                    {data.likes.length} 
+                    {data.likes.length > 0 ? <img src={LikeFilled} className="w-5 h-5" /> :<img src={LikeUnfilled} className="w-5 h-5" />} 
+                  </div>
                 </CardDescription>
               </div>
             </div>

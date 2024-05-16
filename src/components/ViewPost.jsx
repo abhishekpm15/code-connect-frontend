@@ -15,6 +15,9 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import Skeletons from "./Skeletons";
+import LikeFilled from "../assets/likeFilled.png";
+import LikeUnfilled from "../assets/likeUnfilled.png";
+import LargeSkeletons from "./LargeSkeletons";
 
 const ViewPost = ({ id }) => {
   const navigate = useNavigate();
@@ -25,10 +28,10 @@ const ViewPost = ({ id }) => {
   const URL = import.meta.env.VITE_BACKEND_URL;
   const [screenLoad, setScreenLoad] = useState(false);
   const [postSelected, setPostSelected] = useState([]);
+  const [like, setLike] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    // setScreenLoad(true);
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
     const userId = JSON.parse(userInfo).data.id;
@@ -37,7 +40,6 @@ const ViewPost = ({ id }) => {
       console.log("user id", userId);
       if (user === userId) {
         setSaved(true);
-        // setScreenLoad(false);
       }
     });
   }, [savedBy]);
@@ -59,6 +61,9 @@ const ViewPost = ({ id }) => {
         console.log(res);
         console.log("fetch post id", res.data.savedBy);
         setSavedBy(res.data.savedBy);
+        if(res.data.likes.length > 0){
+          setLike(true)
+        }
       })
       .catch((err) => {
         console.log("fetch err", err);
@@ -125,11 +130,30 @@ const ViewPost = ({ id }) => {
     window.open(link, "_blank");
   };
 
+  const handleLike = () => {
+    setLike((prev) => !prev);
+    const userInfo = localStorage.getItem("userInfo");
+    console.log(JSON.parse(userInfo).data.token);
+    const token = JSON.parse(userInfo).data.token;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    axios
+      .post(`${URL}/post/likePost/${id}`, {}, { headers })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       {screenLoad ? (
         <>
-          <Skeletons />
+          <LargeSkeletons />
         </>
       ) : (
         <div className="w-full flex justify-center h-full mt-10 px-24">
@@ -285,6 +309,25 @@ const ViewPost = ({ id }) => {
                   >
                     {saved ? "Unsave" : "Save"}
                   </Button>
+                  <div className="flex items-center">
+                    {like ? (
+                      <button className="bg-black dark:bg-white p-2 rounded-lg hover:scale-125 duration-150" onClick={handleLike}>
+                        <img
+                          src={LikeFilled}
+                          width={"20px"}
+                          className="cursor-pointer "
+                        />
+                      </button>
+                    ) : (
+                      <button className="dark:bg-white p-2 rounded-lg hover:scale-125 duration-150 " onClick={handleLike}>
+                        <img
+                          src={LikeUnfilled}
+                          width={"20px"}
+                          className="cursor-pointer "
+                        />
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
               {load2 ? (
