@@ -165,7 +165,7 @@ const UpdatePost = ({ id }) => {
         </div>
       </Modal>
       <div className="w-full flex justify-center h-full mt-20">
-        <Card className="w-[1000px]">
+        <Card className="w-[1000px] border-black/30 shadow-2xl dark:border-white/30">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Edit Post</CardTitle>

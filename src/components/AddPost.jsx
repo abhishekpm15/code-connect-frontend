@@ -37,7 +37,7 @@ const AddPost = () => {
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [bounty, setBounty] = useState({ min: 10, max: 10 });
-  const [bountyCurrency, setBountyCurrency] = useState("INR");
+  const [bountyCurrency, setBountyCurrency] = useState("₹");
   // const [load, setLoad] = useState(false);
   const [token, setToken] = useState("");
   const [fileList, setFileList] = useState([]);
@@ -124,6 +124,9 @@ const AddPost = () => {
       setUploading(false);
     }
   };
+  useEffect(()=>{
+    console.log(bountyCurrency)
+  },[bountyCurrency])
 
   
   return (

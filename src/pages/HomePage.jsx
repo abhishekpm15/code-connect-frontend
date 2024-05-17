@@ -63,7 +63,7 @@ const HomePage = () => {
             </>
           )}
           {!screenLoad && posts.length === 0 && (
-            <div className="">
+            <div className="overflow-hidden">
               <div className="flex flex-col justify-center mt-24">
                 <div className="text-3xl font-semibold text-center ">
                   There are

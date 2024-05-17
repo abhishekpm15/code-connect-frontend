@@ -18,6 +18,7 @@ import Skeletons from "./Skeletons";
 import LikeFilled from "../assets/likeFilled.png";
 import LikeUnfilled from "../assets/likeUnfilled.png";
 import LargeSkeletons from "./LargeSkeletons";
+import ImageWithLoading from "./ImageWithLoading";
 
 const ViewPost = ({ id }) => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const ViewPost = ({ id }) => {
   const [screenLoad, setScreenLoad] = useState(false);
   const [postSelected, setPostSelected] = useState([]);
   const [like, setLike] = useState(false);
+  const [interestShown, setInterestShown] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -63,6 +65,9 @@ const ViewPost = ({ id }) => {
         setSavedBy(res.data.savedBy);
         if(res.data.likes.length > 0){
           setLike(true)
+        }
+        if(res.data.interestShown.length > 0){
+          setInterestShown(true)
         }
       })
       .catch((err) => {
@@ -120,9 +125,30 @@ const ViewPost = ({ id }) => {
     }
   };
 
-  const handleSolve = () => {
+  const handleInterest = () => {
     setLoad2(true);
+    const userInfo = localStorage.getItem("userInfo");
+    const token = JSON.parse(userInfo).data.token;
+    console.log(JSON.parse(userInfo).data.token);
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    const viewerID = JSON.parse(userInfo).data.id;
+    const viewerEmail = JSON.parse(userInfo).data.email;
+    const viewerName = JSON.parse(userInfo).data.username;
+    axios.post(`${URL}/post/showInterest/${id}`, {viewerID,viewerEmail,viewerName}, { headers }).then((res)=>{
+      console.log(res);
+      toast.info(res.data,{autoClose: 5000, position: "top-center"})
+      setInterestShown((prev) => !prev)
+      setLoad2(false)
+    }).catch((err)=>{
+      console.log(err)
+      toast.error(err.data, {autoClose: 200, position: "top-center"})
+      setLoad2(false)
+    })
   };
+
   const handleLinkClick = (link) => {
     if (!/^https?:\/\//i.test(link)) {
       link = `http://${link}`;
@@ -222,10 +248,8 @@ const ViewPost = ({ id }) => {
                         </div>
                         <div className="flex space-x-5">
                           {postSelected?.description?.uploadedImageURL?.map(
-                            (image) => (
-                              <div className="">
-                                <img src={image} className="w-64" />
-                              </div>
+                            (image, index) => (
+                              <ImageWithLoading key={index} src={image} alt="Post image" />
                             )
                           )}
                         </div>
@@ -341,8 +365,10 @@ const ViewPost = ({ id }) => {
                     />
                   }
                 />
-              ) : (
-                <Button onClick={handleSolve}>Solve Problem</Button>
+              ) : ( <>{
+                interestShown ? <Button onClick={handleInterest} className="bg-blue-400 hover:bg-blue-500">Marked as Interested</Button>
+                : <Button onClick={handleInterest}>Show Interest</Button>}
+                </>
               )}
             </CardFooter>
           </Card>

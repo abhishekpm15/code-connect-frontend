@@ -7,7 +7,7 @@ const Bounty = ({defaultValue, head, bounty, setBounty, type, bountyCurrency, se
   useEffect(() => {
     console.log("bounty", bounty);
     console.log('currecnt', bountyCurrency)
-  }, [bounty]);
+  }, [bounty,bountyCurrency]);
 
   
   const onChange = (value) => {
@@ -19,13 +19,13 @@ const Bounty = ({defaultValue, head, bounty, setBounty, type, bountyCurrency, se
 
   const onSelectChange = (value) => {
     console.log('value',value)
-    setBountyCurrency(value === 'INR' ? '₹' : ( value === 'USD' ? '$' : (value ==='EUR' ? '€' : (value === 'GBP' ? '£' : '¥'))));
+    setBountyCurrency(value === "INR" ? '₹' : ( value === "USD" ? '$' : (value === "EUR" ? '€' : (value === "GBP" ? '£' : '¥'))));
   };
 
   const selectAfter = (
     <Select
       className="bg-white"
-      defaultValue="INR"
+      defaultValue={bountyCurrency}
       onChange={onSelectChange}
       style={{
         width: 60,
