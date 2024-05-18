@@ -81,7 +81,7 @@ const Post = ({ data }) => {
                 <Label>Bounty Amount</Label>
                 <CardDescription className="flex justify-between">
                   <div>
-                    min {data?.description?.bounty?.min} {data?.description?.bountyCurrency} - max
+                    min {data?.description?.bounty?.min} {data?.description?.bountyCurrency} - max {" "}
                     {data?.description?.bounty?.max} (
                     {data?.description?.bountyCurrency})
                   </div>

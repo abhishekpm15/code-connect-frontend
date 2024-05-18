@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,13 +14,16 @@ import { toast } from "react-toastify";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-import Skeletons from "./Skeletons";
 import LikeFilled from "../assets/likeFilled.png";
 import LikeUnfilled from "../assets/likeUnfilled.png";
 import LargeSkeletons from "./LargeSkeletons";
 import ImageWithLoading from "./ImageWithLoading";
+import { SocketContext } from "@/context/SocketProvider";
+// import { useToast } from "@/components/ui/use-toast";
 
 const ViewPost = ({ id }) => {
+  // const { toast:Toast } = useToast()
+
   const navigate = useNavigate();
   const [load, setLoad] = useState(false);
   const [load2, setLoad2] = useState(false);
@@ -32,12 +35,24 @@ const ViewPost = ({ id }) => {
   const [like, setLike] = useState(false);
   const [interestShown, setInterestShown] = useState(false);
   const location = useLocation();
+  const {socket} = useContext(SocketContext)
+
+
+
+  useEffect(() => {
+    socket?.on("getNotification", (data) => {
+      toast.success("New notification")
+      // toast({
+      //   title: "New Notification",
+      // });
+    });
+  }, [socket]);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
     const userId = JSON.parse(userInfo).data.id;
-    const res = savedBy.forEach((user) => {
+    savedBy.forEach((user) => {
       console.log("user", user);
       console.log("user id", userId);
       if (user === userId) {
@@ -50,6 +65,7 @@ const ViewPost = ({ id }) => {
     setScreenLoad(true);
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
+    const userId = JSON.parse(userInfo).data.id;
     const token = JSON.parse(userInfo).data.token;
     const headers = {
       "Content-Type": "application/json",
@@ -63,11 +79,12 @@ const ViewPost = ({ id }) => {
         console.log(res);
         console.log("fetch post id", res.data.savedBy);
         setSavedBy(res.data.savedBy);
-        if(res.data.likes.length > 0){
-          setLike(true)
+        if (res.data.likes.length > 0) {
+          setLike(true);
         }
-        if(res.data.interestShown.length > 0){
-          setInterestShown(true)
+        console.log('list of interest',res.data.interestShown);
+        if (res.data.interestShown.includes(userId)) {
+          setInterestShown(true);
         }
       })
       .catch((err) => {
@@ -126,10 +143,10 @@ const ViewPost = ({ id }) => {
   };
 
   const handleInterest = () => {
-    setLoad2(true);
     const userInfo = localStorage.getItem("userInfo");
     const token = JSON.parse(userInfo).data.token;
     console.log(JSON.parse(userInfo).data.token);
+    setLoad2(true);
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -137,16 +154,27 @@ const ViewPost = ({ id }) => {
     const viewerID = JSON.parse(userInfo).data.id;
     const viewerEmail = JSON.parse(userInfo).data.email;
     const viewerName = JSON.parse(userInfo).data.username;
-    axios.post(`${URL}/post/showInterest/${id}`, {viewerID,viewerEmail,viewerName}, { headers }).then((res)=>{
-      console.log(res);
-      toast.info(res.data,{autoClose: 5000, position: "top-center"})
-      setInterestShown((prev) => !prev)
-      setLoad2(false)
-    }).catch((err)=>{
-      console.log(err)
-      toast.error(err.data, {autoClose: 200, position: "top-center"})
-      setLoad2(false)
-    })
+    axios
+      .post(
+        `${URL}/post/showInterest/${id}`,
+        { viewerID, viewerEmail, viewerName },
+        { headers }
+      )
+      .then((res) => {
+        console.log(res);
+        toast.info(res.data, { autoClose: 5000, position: "top-center" });
+        setInterestShown((prev) => !prev);
+        socket.emit("sendNotification", {
+          viewerName: viewerName,
+          postedBy: postSelected.postedBy,
+        });
+        setLoad2(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.data, { autoClose: 2000, position: "top-center" });
+        setLoad2(false);
+      });
   };
 
   const handleLinkClick = (link) => {
@@ -249,7 +277,11 @@ const ViewPost = ({ id }) => {
                         <div className="flex space-x-5">
                           {postSelected?.description?.uploadedImageURL?.map(
                             (image, index) => (
-                              <ImageWithLoading key={index} src={image} alt="Post image" />
+                              <ImageWithLoading
+                                key={index}
+                                src={image}
+                                alt="Post image"
+                              />
                             )
                           )}
                         </div>
@@ -335,7 +367,10 @@ const ViewPost = ({ id }) => {
                   </Button>
                   <div className="flex items-center">
                     {like ? (
-                      <button className="bg-black dark:bg-white p-2 rounded-lg hover:scale-125 duration-150" onClick={handleLike}>
+                      <button
+                        className="bg-black dark:bg-white p-2 rounded-lg hover:scale-125 duration-150"
+                        onClick={handleLike}
+                      >
                         <img
                           src={LikeFilled}
                           width={"20px"}
@@ -343,7 +378,10 @@ const ViewPost = ({ id }) => {
                         />
                       </button>
                     ) : (
-                      <button className="dark:bg-white p-2 rounded-lg hover:scale-125 duration-150 " onClick={handleLike}>
+                      <button
+                        className="dark:bg-white p-2 rounded-lg hover:scale-125 duration-150 "
+                        onClick={handleLike}
+                      >
                         <img
                           src={LikeUnfilled}
                           width={"20px"}
@@ -365,9 +403,18 @@ const ViewPost = ({ id }) => {
                     />
                   }
                 />
-              ) : ( <>{
-                interestShown ? <Button onClick={handleInterest} className="bg-blue-400 hover:bg-blue-500">Marked as Interested</Button>
-                : <Button onClick={handleInterest}>Show Interest</Button>}
+              ) : (
+                <>
+                  {interestShown ? (
+                    <Button
+                      onClick={handleInterest}
+                      className="bg-blue-400 hover:bg-blue-500"
+                    >
+                      Marked as Interested
+                    </Button>
+                  ) : (
+                    <Button onClick={handleInterest}>Show Interest</Button>
+                  )}
                 </>
               )}
             </CardFooter>

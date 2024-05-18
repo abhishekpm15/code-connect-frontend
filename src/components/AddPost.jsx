@@ -68,7 +68,7 @@ const AddPost = () => {
       return;
     }
     e.preventDefault();
-    if (!postName || !description || !tags || !bounty || !bountyCurrency) {
+    if (!postName || !description || !tags.length > 0 || !bounty || !bountyCurrency) {
       toast.error("Please fill all the details");
       setUploading(false);
       return;

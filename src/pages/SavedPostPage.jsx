@@ -41,9 +41,9 @@ const SavedPostPage = () => {
       ) : (
         <>
           {savedPosts.length > 0 ? (
-            <div className="text-3xl font-semibold mt-16 flex justify-center items-center underline underline-offset-8 ml-16 pl-5 ">
+            <div className="text-3xl font-semibold mt-16 flex justify-center items-center ml-16 pl-5 ">
               <div>
-                <span className="bg-blue-300 text-black ml-2 p-2 mr-2 rounded-lg underline underline-offset-8 decoration-black px-3 py-1">
+                <span className="bg-blue-300 text-black ml-2 p-2 mr-2 rounded-lg  decoration-black px-3 py-1">
                   Saved Posts
                 </span>
               </div>
