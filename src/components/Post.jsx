@@ -39,7 +39,7 @@ const Post = ({ data }) => {
   return (
     <div className="">
       <Card
-        className="dark:bg-transparent w-[350px] hover:scale-105 hover:shadow-lg duration-200 border-black/20
+        className="dark:bg-transparent w-[350px] md:w-[350px] xl:w-[350px] hover:scale-105 hover:shadow-lg duration-200 border-black/20
         shadow-md shadow-black dark:shadow-white/30 dark:border-white/20"
       >
         <CardHeader>

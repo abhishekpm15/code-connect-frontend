@@ -43,8 +43,9 @@ const SavedPostPage = () => {
           {savedPosts.length > 0 ? (
             <div className="text-3xl font-semibold mt-16 flex justify-center items-center ml-16 pl-5 ">
               <div>
+              Saved
                 <span className="bg-blue-300 text-black ml-2 p-2 mr-2 rounded-lg  decoration-black px-3 py-1">
-                  Saved Posts
+                   Posts
                 </span>
               </div>
             </div>
@@ -55,7 +56,7 @@ const SavedPostPage = () => {
             <div className="flex justify-evenly mt-16">
               {savedPosts.length > 0 ? (
                 <div>
-                  <div className="grid grid-cols-4 gap-5 ">
+                  <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-5 gap-y-7 ">
                     {savedPosts?.map((post, index) => (
                       <Post data={post} key={index} />
                     ))}

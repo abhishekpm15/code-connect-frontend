@@ -21,7 +21,7 @@ function App() {
       <ToastContainer autoClose={2000}/>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <Router>
-          <AppContent />
+          <AppContent/>
         </Router>
       </ThemeProvider>
     </div>

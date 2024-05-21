@@ -47,16 +47,16 @@ const HomePage = () => {
         <>
           {!screenLoad && posts.length > 0 && (
             <>
-              <div className=" mt-14 pl-44">
+              <div className="mt-14 w-full flex justify-center">
                 <Filter />
               </div>
-              <div className="flex justify-evenly mt-16">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-5 gap-y-7 ">
+              <div className="flex justify-evenly mt-16 xl:px-10">
+                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-x-5 gap-y-7 ">
                   {posts?.map((post, index) => (
                     <Post data={post} key={index} />
                   ))}
                 </div>
-                <div className="sm:block hidden">
+                <div className="2xl:block hidden">
                   <GlobalChat />
                 </div>
               </div>
