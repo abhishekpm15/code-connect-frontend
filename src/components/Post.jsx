@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,11 +13,34 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import LikeFilled from "../assets/likeFilled.png";
 import LikeUnfilled from "../assets/likeUnfilled.png";
+import { SocketContext } from "@/context/SocketProvider";
+import { toast } from "react-toastify";
 
 const Post = ({ data }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [btn, setBtn] = useState(false);
+  const [likes, setLikes] = useState(data.likes.length);
+  const { socket } = useContext(SocketContext);
+
+  useEffect(() => {
+    const handleGetLike = (datas) => {
+      if (data.postId === datas.id) {
+        setLikes((prev) => prev + 1);
+      }
+    };
+    const handleRemoveLike = (datas) => {
+      if (data.postId === datas.id) {
+        setLikes((prev) => prev - 1);
+      }
+    };
+    socket?.on("getLike", handleGetLike);
+    socket?.on("removeLike", handleRemoveLike);
+    return () => {
+      socket?.off("getLike", handleGetLike);
+      socket?.off("removeLike", handleRemoveLike);
+    };
+  }, [socket, data]);
 
   useEffect(() => {
     if (location.pathname === "/myposts") {
@@ -42,6 +65,7 @@ const Post = ({ data }) => {
         className="dark:bg-transparent w-[350px] md:w-[350px] xl:w-[350px] hover:scale-105 hover:shadow-lg duration-200 border-black/20
         shadow-md shadow-black dark:shadow-white/30 dark:border-white/20"
       >
+        {/* <div className="h-2 rounded-md w-10 mt-4 bg-red-400 -rotate-45 "></div> */}
         <CardHeader>
           <div className="flex items-center">
             <div className="flex">Status : {data.status}</div>
@@ -81,13 +105,18 @@ const Post = ({ data }) => {
                 <Label>Bounty Amount</Label>
                 <CardDescription className="flex justify-between">
                   <div>
-                    min {data?.description?.bounty?.min} {data?.description?.bountyCurrency} - max {" "}
+                    min {data?.description?.bounty?.min} (
+                    {data?.description?.bountyCurrency}) - max{" "}
                     {data?.description?.bounty?.max} (
                     {data?.description?.bountyCurrency})
                   </div>
                   <div className="flex gap-2">
-                    {data.likes.length} 
-                    {data.likes.length > 0 ? <img src={LikeFilled} className="w-5 h-5" /> :<img src={LikeUnfilled} className="w-5 h-5" />} 
+                    {likes}
+                    {likes > 0 ? (
+                      <img src={LikeFilled} className="w-5 h-5" />
+                    ) : (
+                      <img src={LikeUnfilled} className="w-5 h-5" />
+                    )}
                   </div>
                 </CardDescription>
               </div>

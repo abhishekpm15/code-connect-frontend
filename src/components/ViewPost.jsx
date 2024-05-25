@@ -36,15 +36,11 @@ const ViewPost = ({ id }) => {
   const [interestShown, setInterestShown] = useState(false);
   const location = useLocation();
   const {socket} = useContext(SocketContext)
-
-
+  const [userId, setUserId] = useState('')
 
   useEffect(() => {
     socket?.on("getNotification", (data) => {
-      toast.success("New notification")
-      // toast({
-      //   title: "New Notification",
-      // });
+      toast.success("New notification 222")
     });
   }, [socket]);
 
@@ -75,6 +71,7 @@ const ViewPost = ({ id }) => {
       .get(`${URL}/post/getPost/${id}`, { headers })
       .then((res) => {
         setPostSelected(res.data);
+        setUserId(userId)
         setScreenLoad(false);
         console.log(res);
         console.log("fetch post id", res.data.savedBy);
@@ -154,6 +151,11 @@ const ViewPost = ({ id }) => {
     const viewerID = JSON.parse(userInfo).data.id;
     const viewerEmail = JSON.parse(userInfo).data.email;
     const viewerName = JSON.parse(userInfo).data.username;
+    // if(viewerID === postSelected.postedBy?.user_id){
+    //   toast.error("Sorry! It's your post")
+    //   setLoad(false)
+    //   return;
+    // }
     axios
       .post(
         `${URL}/post/showInterest/${id}`,
@@ -196,7 +198,11 @@ const ViewPost = ({ id }) => {
     axios
       .post(`${URL}/post/likePost/${id}`, {}, { headers })
       .then((res) => {
-        console.log(res);
+        console.log('res',res);
+        if(res.data === "Liked")
+          socket.emit("sendLike",{id});
+        else 
+        socket.emit("unsendLike",{id});
       })
       .catch((err) => {
         console.log(err);
@@ -227,7 +233,12 @@ const ViewPost = ({ id }) => {
                 </div>
               </div>
               <CardDescription className="flex">
+                <div >
                 created by : {postSelected.postedBy?.user.username}
+                  <span>
+                    {postSelected.postedBy?.user_id === userId && " (You)"}
+                  </span>
+                </div>
                 <Avatar className="ml-2 mr-2 w-5 h-5">
                   <AvatarImage
                     src="https://github.com/shadcn.png"
@@ -367,7 +378,7 @@ const ViewPost = ({ id }) => {
                   </Button>
                   <div className="flex items-center">
                     {like ? (
-                      <button
+                      postSelected.postedBy?.user_id !== userId && <button
                         className="bg-black dark:bg-white p-2 rounded-lg hover:scale-125 duration-150"
                         onClick={handleLike}
                       >
@@ -378,7 +389,7 @@ const ViewPost = ({ id }) => {
                         />
                       </button>
                     ) : (
-                      <button
+                      postSelected.postedBy?.user_id !== userId && <button
                         className="dark:bg-white p-2 rounded-lg hover:scale-125 duration-150 "
                         onClick={handleLike}
                       >
@@ -413,7 +424,7 @@ const ViewPost = ({ id }) => {
                       Marked as Interested
                     </Button>
                   ) : (
-                    <Button onClick={handleInterest}>Show Interest</Button>
+                    postSelected.postedBy?.user_id === userId ? <> </> : <Button onClick={handleInterest}>Show Interest</Button>
                   )}
                 </>
               )}
