@@ -39,13 +39,13 @@ const LandingPage = () => {
         </Modal>
       )}
       <Navbar isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-      {/* <section className="h-screen  relative first-section "> */}
+      <section className="h-screen  relative first-section ">
         <Header isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-      {/* </section> */}
-      {/* <section className="h-screen relative" id="second-section">
+      </section>
+      <section className="h-screen relative" id="second-section">
         <LearnMorePage />
       </section>
-      <section className="h-screen relative" id="third-section"></section> */}
+      {/* <section className="h-screen relative" id="third-section"></section> */}
     </div>
   );
 };

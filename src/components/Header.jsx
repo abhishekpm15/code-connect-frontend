@@ -15,8 +15,8 @@ const Header = ({setIsModalOpen }) => {
   return (
     <div className="w-full flex flex-col space-y-7 mt-32 font-customFont items-center">
       <Stars />
-      <div className="h-96 w-96 absolute circle1 left-[30%] top-[24%] bg-purple-600 rounded-full blur-xl opacity-30 circle1 -z-20"></div>
-      <div className="h-96 w-96 absolute circle2 right-[30%] bg-indigo-600 rounded-full blur-xl opacity-30 circle2 -z-20"></div>
+      {/* <div className="h-96 w-96 absolute circle1 left-[30%] top-[24%] bg-purple-600 rounded-full blur-xl opacity-30 circle1 -z-20"></div>
+      <div className="h-96 w-96 absolute circle2 right-[30%] bg-indigo-600 rounded-full blur-xl opacity-30 circle2 -z-20"></div> */}
       <div className={`text-7xl font-semibold  dark:text-white text-black`}>
         Code. <span className="dark:bg-blue-300  bg-blue-400 px-2 py-2 dark:text-black text-white rounded-xl">Connect</span>
       </div>
