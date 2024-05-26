@@ -45,7 +45,6 @@ const LandingPage = () => {
       <section className="h-screen relative" id="second-section">
         <LearnMorePage />
       </section>
-      {/* <section className="h-screen relative" id="third-section"></section> */}
     </div>
   );
 };

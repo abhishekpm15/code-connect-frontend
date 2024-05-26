@@ -18,7 +18,7 @@ import Tags from "./Tags";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Profile = ({ username, email, techStacks, websiteLinks, bio, socialLinks }) => {
+const Profile = ({ username, email, techStacks, websiteLinks, bio, socialLinks, setTechStack }) => {
   console.log(username, email);
   const [inputs, setInputs] = useState([""]);
   const [message, setMessage] = useState("");
@@ -29,8 +29,13 @@ const Profile = ({ username, email, techStacks, websiteLinks, bio, socialLinks }
   const URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(()=>{
+    console.log('tgs changed', tags)
+    setTechStack(tags)
+  },[tags])
+
+  useEffect(()=>{
     if(techStacks){
-      console.log(tags)
+      console.log('tags',tags)
       console.log(techStacks)
       setTags(techStacks);
     }
