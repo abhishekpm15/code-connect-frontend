@@ -23,7 +23,7 @@ const ProfileLinks = ({inputs, setInputs}) => {
   return (
     <div>
       <div className="sm:col-span-2">
-        {inputs.map((input, index) => (
+        {inputs?.map((input, index) => (
           <div key={index} className="flex flex-row mt-1">
             <input
               type="text"

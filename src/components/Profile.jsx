@@ -18,7 +18,7 @@ import Tags from "./Tags";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Profile = ({ username, email, techStacks, websiteLinks, bio, socialLinks, setTechStack }) => {
+const Profile = ({ username, email, techStacks, websiteLinks, bio, socialLinks, setTechStack, setBio, setSiteLinks, setGitLink, setTwitterLink }) => {
   console.log(username, email);
   const [inputs, setInputs] = useState([""]);
   const [message, setMessage] = useState("");
@@ -30,10 +30,17 @@ const Profile = ({ username, email, techStacks, websiteLinks, bio, socialLinks, 
 
   useEffect(()=>{
     console.log('tgs changed', tags)
+    console.log('message',message)
+    console.log('inputs', inputs)
     setTechStack(tags)
-  },[tags])
+    setBio(message)
+    setSiteLinks(inputs)
+    setTwitterLink(twitter)
+    setGitLink(github)
+  },[github, inputs, message, setBio, setGitLink, setSiteLinks, setTechStack, setTwitterLink, tags, twitter])
 
   useEffect(()=>{
+    console.log('techstacks',techStacks)
     if(techStacks){
       console.log('tags',tags)
       console.log(techStacks)
@@ -52,7 +59,7 @@ const Profile = ({ username, email, techStacks, websiteLinks, bio, socialLinks, 
     if(bio){
       setMessage(bio)
     }
-  },[bio,techStacks,websiteLinks])
+  },[bio, socialLinks, techStacks, websiteLinks])
 
   const handleSave = () =>{
     setLoad(true)

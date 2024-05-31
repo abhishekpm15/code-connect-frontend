@@ -336,7 +336,8 @@ const ViewPost = ({ id }) => {
                   <div className="flex flex-col space-y-1.5 ">
                     <div className="dark:text-white font-semibold">Bounty </div>
                     <CardDescription>
-                      Min {postSelected.description?.bounty.min} - Max{" "}
+                      Min {postSelected.description?.bounty.min} (
+                      {postSelected.description?.bountyCurrency}) - Max{" "}
                       {postSelected.description?.bounty.max} (
                       {postSelected.description?.bountyCurrency})
                     </CardDescription>
