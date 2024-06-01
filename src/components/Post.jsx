@@ -62,9 +62,8 @@ const Post = ({ data }) => {
   return (
     <div className="">
       <Card
-        className="dark:bg-transparent w-[350px] md:w-[350px] xl:w-[350px] hover:scale-105 hover:shadow-lg duration-200 border-black/20
-        shadow-md shadow-black dark:shadow-white/30 dark:border-white/20"
-      >
+        className="dark:bg-transparent w-[350px] md:w-[350px] xl:w-[350px] hover:scale-105 hover:border-2 duration-200 border-black
+         shadow-black dark:border-white/20 dark:hover:border-white/40">
         {/* <div className="h-2 rounded-md w-10 mt-4 bg-red-400 -rotate-45 "></div> */}
         <CardHeader>
           <div className="flex items-center">
