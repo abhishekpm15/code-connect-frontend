@@ -19,6 +19,11 @@ import LikeUnfilled from "../assets/likeUnfilled.png";
 import LargeSkeletons from "./LargeSkeletons";
 import ImageWithLoading from "./ImageWithLoading";
 import { SocketContext } from "@/context/SocketProvider";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import { FaLink } from "react-icons/fa";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 // import { useToast } from "@/components/ui/use-toast";
 
 const ViewPost = ({ id }) => {
@@ -35,27 +40,43 @@ const ViewPost = ({ id }) => {
   const [like, setLike] = useState(false);
   const [interestShown, setInterestShown] = useState(false);
   const location = useLocation();
-  const {socket} = useContext(SocketContext)
-  const [userId, setUserId] = useState('')
+  const { socket } = useContext(SocketContext);
+  const [userId, setUserId] = useState("");
 
-  useEffect(() => {
-    socket?.on("getNotification", (data) => {
-      toast.success("New notification 222")
-    });
-  }, [socket]);
+  // useEffect(() => {
+  //   console.log("interest between", interestShown);
+  // }, [interestShown]);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
-    const userId = JSON.parse(userInfo).data.id;
-    savedBy.forEach((user) => {
-      console.log("user", user);
-      console.log("user id", userId);
-      if (user === userId) {
-        setSaved(true);
-      }
-    });
-  }, [savedBy]);
+    const token = JSON.parse(userInfo).data.token;
+    console.log(JSON.parse(userInfo).data.token);
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    axios
+      .get(`${URL}/post/getSavedBy/${id}`, { headers })
+      .then((res) => {
+        if (res.data.savedByUser) {
+          setSaved(true);
+        } else {
+          setSaved(false);
+        }
+        console.log("res", res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // savedBy.forEach((user) => {
+    //   console.log("user", user);
+    //   console.log("user id", userId);
+    //   if (user === userId) {
+    //     setSaved(true);
+    //   }
+    // });
+  }, [URL, id, savedBy]);
 
   useEffect(() => {
     setScreenLoad(true);
@@ -71,7 +92,7 @@ const ViewPost = ({ id }) => {
       .get(`${URL}/post/getPost/${id}`, { headers })
       .then((res) => {
         setPostSelected(res.data);
-        setUserId(userId)
+        setUserId(userId);
         setScreenLoad(false);
         console.log(res);
         console.log("fetch post id", res.data.savedBy);
@@ -79,7 +100,7 @@ const ViewPost = ({ id }) => {
         if (res.data.likes.length > 0) {
           setLike(true);
         }
-        console.log('list of interest',res.data.interestShown);
+        console.log("list of interest", res.data.interestShown);
         if (res.data.interestShown.includes(userId)) {
           setInterestShown(true);
         }
@@ -88,7 +109,7 @@ const ViewPost = ({ id }) => {
         console.log("fetch err", err);
         setScreenLoad(false);
       });
-  }, []);
+  }, [URL, id]);
 
   const handleSave = async (e) => {
     const userInfo = localStorage.getItem("userInfo");
@@ -149,13 +170,9 @@ const ViewPost = ({ id }) => {
       Authorization: `Bearer ${token}`,
     };
     const viewerID = JSON.parse(userInfo).data.id;
+    console.log("viewer id", viewerID);
     const viewerEmail = JSON.parse(userInfo).data.email;
     const viewerName = JSON.parse(userInfo).data.username;
-    // if(viewerID === postSelected.postedBy?.user_id){
-    //   toast.error("Sorry! It's your post")
-    //   setLoad(false)
-    //   return;
-    // }
     axios
       .post(
         `${URL}/post/showInterest/${id}`,
@@ -165,10 +182,16 @@ const ViewPost = ({ id }) => {
       .then((res) => {
         console.log(res);
         toast.info(res.data, { autoClose: 5000, position: "top-center" });
-        setInterestShown((prev) => !prev);
-        socket.emit("sendNotification", {
-          viewerName: viewerName,
-          postedBy: postSelected.postedBy,
+        setInterestShown((prev) => {
+          const newInterestShown = !prev;
+          if (newInterestShown) {
+            socket.emit("sendNotification", {
+              viewerName: viewerName,
+              viewerID: viewerID,
+              postedBy: postSelected.postedBy,
+            });
+          }
+          return newInterestShown;
         });
         setLoad2(false);
       })
@@ -198,11 +221,9 @@ const ViewPost = ({ id }) => {
     axios
       .post(`${URL}/post/likePost/${id}`, {}, { headers })
       .then((res) => {
-        console.log('res',res);
-        if(res.data === "Liked")
-          socket.emit("sendLike",{id});
-        else 
-        socket.emit("unsendLike",{id});
+        console.log("res", res);
+        if (res.data === "Liked") socket.emit("sendLike", { id });
+        else socket.emit("unsendLike", { id });
       })
       .catch((err) => {
         console.log(err);
@@ -210,7 +231,7 @@ const ViewPost = ({ id }) => {
   };
 
   return (
-    <div>
+    <div className="pb-20">
       {screenLoad ? (
         <>
           <LargeSkeletons />
@@ -233,8 +254,8 @@ const ViewPost = ({ id }) => {
                 </div>
               </div>
               <CardDescription className="flex">
-                <div >
-                created by : {postSelected.postedBy?.user.username}
+                <div>
+                  created by : {postSelected.postedBy?.user.username}
                   <span>
                     {postSelected.postedBy?.user_id === userId && " (You)"}
                   </span>
@@ -263,7 +284,7 @@ const ViewPost = ({ id }) => {
                     </CardDescription>
                     <div className="flex space-x-3"></div>
                   </div>
-                  <div className="flex flex-col space-y-1.5 ">
+                  <div className="flex flex-col space-y-3 ">
                     <div className="dark:text-white font-semibold text-black">
                       Tech stacks
                     </div>
@@ -271,15 +292,14 @@ const ViewPost = ({ id }) => {
                       {postSelected.description?.tags.map((tag, index) => (
                         <div
                           key={index}
-                          className="bg-green-300 text-black ml-1 font-semibold rounded-md p-1 w-full inline"
+                          className="bg-green-300 text-black mr-2 px-2 font-semibold rounded-md p-1 w-full inline"
                         >
                           {tag}
                         </div>
                       ))}
                     </CardDescription>
-                    <div className="flex space-x-3"></div>
                   </div>
-                  <div className="flex flex-col space-y-1.5 ">
+                  <div className="flex flex-col space-y-3 ">
                     {postSelected?.description?.uploadedImageURL.length > 0 ? (
                       <>
                         <div className="dark:text-white font-semibold">
@@ -304,29 +324,34 @@ const ViewPost = ({ id }) => {
                     )}
                   </div>
                   <div className="flex flex-col space-y-1.5 ">
+                    <div className="dark:text-white font-semibold">
+                      URLs / Links
+                    </div>
                     {postSelected?.description?.inputs.length > 0 ? (
-                      <>
-                        <div className="dark:text-white font-semibold">
-                          URLs / Links
-                        </div>
-                        {postSelected?.description?.inputs?.map(
-                          (link, index) => (
-                            <div
-                              key={index}
-                              className="bg-blue-300 w-1/2 text-black font-semibold rounded-md px-2 py-1"
-                            >
-                              <a
-                                href={link}
-                                onClick={() => handleLinkClick(link)}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                      postSelected.description.inputs.map((link, index) => (
+                        <>
+                          {link.length > 0 && (
+                            <div className="flex items-center">
+                              <div>
+                                <FaLink />
+                              </div>
+                              <div
+                                key={index}
+                                className=" w-1/2 dark:text-white/50 text-black/50 font-normal rounded-md px-2 py-1"
                               >
-                                {link}
-                              </a>
+                                <a
+                                  href={link}
+                                  onClick={() => handleLinkClick(link)}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {link}
+                                </a>
+                              </div>
                             </div>
-                          )
-                        )}
-                      </>
+                          )}
+                        </>
+                      ))
                     ) : (
                       <div className="dark:text-white font-semibold text-black">
                         No Links
@@ -352,7 +377,7 @@ const ViewPost = ({ id }) => {
                   indicator={
                     <LoadingOutlined
                       style={{
-                        fontSize: 24,
+                        fontSize: 40,
                       }}
                       spin
                     />
@@ -372,35 +397,49 @@ const ViewPost = ({ id }) => {
                   <Button
                     onClick={handleSave}
                     className={`${
-                      saved ? "bg-blue-400 hover:bg-blue-500" : ""
+                      saved ? "text-white bg-blue-600 hover:bg-blue-500" : ""
                     }`}
                   >
+                    {!saved ? (
+                      <>
+                        <BookmarkBorderIcon />
+                      </>
+                    ) : (
+                      <BookmarkIcon />
+                    )}{" "}
+                    &nbsp;
                     {saved ? "Unsave" : "Save"}
                   </Button>
                   <div className="flex items-center">
-                    {like ? (
-                      postSelected.postedBy?.user_id !== userId && <button
-                        className="bg-black dark:bg-white p-2 rounded-lg hover:scale-125 duration-150"
-                        onClick={handleLike}
-                      >
-                        <img
-                          src={LikeFilled}
-                          width={"20px"}
-                          className="cursor-pointer "
-                        />
-                      </button>
-                    ) : (
-                      postSelected.postedBy?.user_id !== userId && <button
-                        className="dark:bg-white p-2 rounded-lg hover:scale-125 duration-150 "
-                        onClick={handleLike}
-                      >
-                        <img
-                          src={LikeUnfilled}
-                          width={"20px"}
-                          className="cursor-pointer "
-                        />
-                      </button>
-                    )}
+                    {like
+                      ? postSelected.postedBy?.user_id !== userId && (
+                          <button
+                            // className="bg-black dark:bg-white p-2 rounded-lg hover:scale-125 duration-150"
+                            className="hover:scale-125 duration-200"
+                            onClick={handleLike}
+                          >
+                            <FavoriteIcon fontSize="medium" />
+                            {/* <img
+                              src={LikeFilled}
+                              width={"20px"}
+                              className="cursor-pointer "
+                            /> */}
+                          </button>
+                        )
+                      : postSelected.postedBy?.user_id !== userId && (
+                          <button
+                            className="hover:scale-125 duration-200"
+                            // className="dark:bg-white p-2 rounded-lg hover:scale-125 duration-150 "
+                            onClick={handleLike}
+                          >
+                            <FavoriteBorderIcon fontSize="medium" />
+                            {/* <img
+                              src={LikeUnfilled}
+                              width={"20px"}
+                              className="cursor-pointer "
+                            /> */}
+                          </button>
+                        )}
                   </div>
                 </div>
               )}
@@ -420,12 +459,14 @@ const ViewPost = ({ id }) => {
                   {interestShown ? (
                     <Button
                       onClick={handleInterest}
-                      className="bg-blue-400 hover:bg-blue-500"
+                      className="bg-blue-600 hover:bg-blue-500 dark:text-white"
                     >
                       Marked as Interested
                     </Button>
+                  ) : postSelected.postedBy?.user_id === userId ? (
+                    <> </>
                   ) : (
-                    postSelected.postedBy?.user_id === userId ? <> </> : <Button onClick={handleInterest}>Show Interest</Button>
+                    <Button onClick={handleInterest}>Show Interest</Button>
                   )}
                 </>
               )}

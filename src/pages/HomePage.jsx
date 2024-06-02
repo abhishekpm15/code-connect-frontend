@@ -9,6 +9,8 @@ import GlobalChat from "@/components/GlobalChat";
 import Post from "@/components/Post";
 import { SocketContext } from "@/context/SocketProvider";
 import { toast } from "react-toastify";
+import { SearchContext } from "@/context/SearchProvider";
+import { NotificationContext } from "@/context/NotificationProvider";
 
 const HomePage = () => {
   const rowsPerPage = 6;
@@ -17,6 +19,32 @@ const HomePage = () => {
   const [screenLoad, setScreenLoad] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const { searched, searchPost } = useContext(SearchContext);
+  const { socket } = useContext(SocketContext);
+  const {notification, setNotification} = useContext(NotificationContext)
+
+  useEffect(() => {
+    const handleGetNotification = (datas) => {
+      const userInfo = localStorage.getItem("userInfo");
+      const id = JSON.parse(userInfo).data.id;
+      console.log("id postedid", id, datas.receiverId);
+      if (id === datas.receiverId) {
+        setNotification((prev => prev+1))
+        toast.info(
+          `You have new Interest notification from ${datas.senderName}`,
+          {
+            autoClose: 5000,
+            position: "top-center",
+          }
+        );
+      }
+    };
+    socket?.on("getNotification", handleGetNotification);
+    return () => {
+      socket?.off("getNotification", handleGetNotification);
+    };
+  }, [socket]);
+  
   // const {socket} = useContext(SocketContext)
 
   // useEffect(() => {
@@ -24,7 +52,6 @@ const HomePage = () => {
   //     toast.success("New notification")
   //   });
   // }, [socket]);
-
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -37,9 +64,12 @@ const HomePage = () => {
       };
 
       try {
-        const res = await axios.get(`${URL}/post/allPosts?page=${currentPage}&limit=${rowsPerPage}`, { headers });
+        const res = await axios.get(
+          `${URL}/post/allPosts?page=${currentPage}&limit=${rowsPerPage}`,
+          { headers }
+        );
         setPosts(res.data.posts);
-        console.log("post fetched",res.data.posts)
+        console.log("post fetched", res.data.posts);
         setTotalPages(Math.ceil(res.data.totalCount / rowsPerPage));
         setScreenLoad(false);
       } catch (err) {
@@ -49,7 +79,7 @@ const HomePage = () => {
     };
 
     fetchPosts();
-  }, [currentPage, rowsPerPage]);
+  }, [URL, currentPage, rowsPerPage]);
 
   return (
     <Background>
@@ -63,11 +93,27 @@ const HomePage = () => {
                 <div className="mt-14 w-full flex justify-center">
                   <Filter />
                 </div>
-                <div className="flex justify-evenly mt-16 xl:px-10">
+                {searched ? (
+                  <>
+                    <div className="text-2xl font-semibold mt-5 flex justify-center  items-center  ml-6">
+                      Search
+                      <span className="bg-blue-300 text-black ml-2 p-2 mr-2 rounded-lg  decoration-black">
+                        Results
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
+                <div className="flex justify-evenly mt-10 xl:px-10">
                   <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-5 gap-y-7">
-                    {posts.map((post, index) => (
-                      <Post data={post} key={index} />
-                    ))}
+                    {searched
+                      ? searchPost?.map((post, index) => (
+                          <Post data={post} key={index} />
+                        ))
+                      : posts?.map((post, index) => (
+                          <Post data={post} key={index} />
+                        ))}
                   </div>
                   <div className="2xl:block hidden">
                     <GlobalChat />

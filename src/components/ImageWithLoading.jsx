@@ -29,7 +29,7 @@ const ImageWithLoading = ({ src, alt }) => {
       <div className="relative w-64 h-64">
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <Spin />
+            <Spin size="large"/>
           </div>
         )}
         <img

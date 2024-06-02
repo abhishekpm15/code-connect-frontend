@@ -25,6 +25,7 @@ const Post = ({ data }) => {
 
   useEffect(() => {
     const handleGetLike = (datas) => {
+      console.log("datas", datas);
       if (data.postId === datas.id) {
         setLikes((prev) => prev + 1);
       }
@@ -62,9 +63,10 @@ const Post = ({ data }) => {
   return (
     <div className="">
       <Card
-        className="dark:bg-transparent w-[350px] md:w-[350px] xl:w-[350px] hover:scale-105 hover:border-2 duration-200 border-black
-         shadow-black dark:border-white/20 dark:hover:border-white/40">
-        {/* <div className="h-2 rounded-md w-10 mt-4 bg-red-400 -rotate-45 "></div> */}
+        className="dark:bg-transparent w-[350px] h-[440px] hover:scale-105 hover:border-2 duration-200 border-black
+         shadow-black dark:border-white/20 dark:hover:border-white/40"
+      >
+        {/* <div className="h-2 rounded-md w-2 bg-red-400"></div> */}
         <CardHeader>
           <div className="flex items-center">
             <div className="flex">Status : {data.status}</div>
@@ -140,6 +142,15 @@ const Post = ({ data }) => {
               }}
             >
               View Post
+              <span className="ml-3 text-xs">
+                {/* {
+                JSON.parse(localStorage.getItem("userInfo")).data.id === data.postedBy.user_id ? "🫵🏻" : ""
+              } */}
+                {JSON.parse(localStorage.getItem("userInfo")).data.id ===
+                data.postedBy.user_id
+                  ? "(Your post)"
+                  : ""}
+              </span>
             </Button>
           )}
         </CardFooter>
