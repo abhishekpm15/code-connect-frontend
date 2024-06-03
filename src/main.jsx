@@ -13,11 +13,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <ThemeProvider>
     <UserProvider>
       <SocketProvider>
-        <SearchProvider>
-          <NotificationProvider>
+        <NotificationProvider>
+          <SearchProvider>
             <App />
-          </NotificationProvider>
-        </SearchProvider>
+          </SearchProvider>
+        </NotificationProvider>
       </SocketProvider>
     </UserProvider>
   </ThemeProvider>

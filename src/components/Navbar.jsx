@@ -26,8 +26,6 @@ const Navbar = ({ setIsModalOpen }) => {
   const location = useLocation();
   const [currentLink, setCurrentLink] = useState("");
   const { notification } = useContext(NotificationContext);
-  console.log("notification", notification);
-
   useEffect(() => {
     console.log("location change", location.pathname);
     if (location.pathname === "/home") {
@@ -48,7 +46,9 @@ const Navbar = ({ setIsModalOpen }) => {
     } else if (location.pathname === "/interestedposts") {
       setCurrentLink("interestedposts");
       console.log("current", currentLink);
-    } else {
+    } else if(location.pathname === "/notifications") {
+      console.log("current", currentLink);
+    }else {
       setCurrentLink("");
     }
   }, [location, currentLink]);
@@ -86,7 +86,7 @@ const Navbar = ({ setIsModalOpen }) => {
             >
               Home
             </li>
-            <li  className="hover:bg-[#4f46e5] border font-semibold px-2 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10">
+            <li className="hover:bg-[#4f46e5] border font-semibold px-2 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10">
               Chats
             </li>
             <li
@@ -106,7 +106,9 @@ const Navbar = ({ setIsModalOpen }) => {
                 <Button variant="outline" className="relative">
                   Account{" "}
                   <span className="absolute left-20 -top-2">
-                    {notification > 0 && <Badges count={notification} dot={true} />}
+                    {notification > 0 && (
+                      <Badges count={notification} dot={true} />
+                    )}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
@@ -166,12 +168,20 @@ const Navbar = ({ setIsModalOpen }) => {
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Interested Posts</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem  className={`${
+                        currentLink === "notifications"
+                          ? "bg-[#4f46e5] text-white px-2 py-1 rounded-lg"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        navigate("/notifications");
+                      }}>
                       <CreditCard className="mr-2 h-4 w-4" />
                       Notifications
                       <span className="ml-2">
-                        {notification > 0 && <Badges count={notification} type={"Dot"}
-                        />}
+                        {notification > 0 && (
+                          <Badges count={notification} type={"Dot"} />
+                        )}
                       </span>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>

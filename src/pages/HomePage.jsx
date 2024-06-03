@@ -20,30 +20,30 @@ const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const { searched, searchPost } = useContext(SearchContext);
-  const { socket } = useContext(SocketContext);
-  const {notification, setNotification} = useContext(NotificationContext)
+  // const { socket } = useContext(SocketContext);
+  // const {notification, setNotification} = useContext(NotificationContext)
 
-  useEffect(() => {
-    const handleGetNotification = (datas) => {
-      const userInfo = localStorage.getItem("userInfo");
-      const id = JSON.parse(userInfo).data.id;
-      console.log("id postedid", id, datas.receiverId);
-      if (id === datas.receiverId) {
-        setNotification((prev => prev+1))
-        toast.info(
-          `You have new Interest notification from ${datas.senderName}`,
-          {
-            autoClose: 5000,
-            position: "top-center",
-          }
-        );
-      }
-    };
-    socket?.on("getNotification", handleGetNotification);
-    return () => {
-      socket?.off("getNotification", handleGetNotification);
-    };
-  }, [socket]);
+  // useEffect(() => {
+  //   const handleGetNotification = (datas) => {
+  //     const userInfo = localStorage.getItem("userInfo");
+  //     const id = JSON.parse(userInfo).data.id;
+  //     console.log("id postedid", id, datas.receiverId);
+  //     if (id === datas.receiverId) {
+  //       setNotification((prev => prev+1))
+  //       toast.info(
+  //         `You have new Interest notification from ${datas.senderName}`,
+  //         {
+  //           autoClose: 5000,
+  //           position: "top-center",
+  //         }
+  //       );
+  //     }
+  //   };
+  //   socket?.on("getNotification", handleGetNotification);
+  //   return () => {
+  //     socket?.off("getNotification", handleGetNotification);
+  //   };
+  // }, [socket]);
   
   // const {socket} = useContext(SocketContext)
 

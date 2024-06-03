@@ -185,11 +185,29 @@ const ViewPost = ({ id }) => {
         setInterestShown((prev) => {
           const newInterestShown = !prev;
           if (newInterestShown) {
-            socket.emit("sendNotification", {
-              viewerName: viewerName,
-              viewerID: viewerID,
-              postedBy: postSelected.postedBy,
-            });
+            axios
+              .post(
+                `${URL}/notification/sendNotification`,
+                {
+                  viewerID,
+                  viewerName,
+                  postID: id,
+                  postedBy:postSelected.postedBy
+                },
+                { headers }
+              )
+              .then((res) => {
+                socket.emit("sendNotification", {
+                  viewerName: viewerName,
+                  viewerID: viewerID,
+                  postedBy: postSelected.postedBy,
+                });
+                // toast.info(res.data.notification.notifications.title)
+                console.log("res", res.data.notification.notifications);
+              })
+              .catch((err) => {
+                console.log("err", err);
+              });
           }
           return newInterestShown;
         });
