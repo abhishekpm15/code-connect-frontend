@@ -15,6 +15,7 @@ import UpdatePostPage from "./pages/UpdatePostPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Navbar from "./components/Navbar";
 import InterestedPostPage from "./pages/InterestedPostPage";
+import NotificationPage from "./pages/NotificationPage";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function AppContent() {
           <Route path="/myposts" element={<MyPostPage />} />
           <Route path="/interestedposts" element={<InterestedPostPage />} />
           <Route path="/savedposts" element={<SavedPostPage />} />
+          <Route path="/notifications" element={<NotificationPage />} />
           <Route path="/posts/updatePost/:id" element={<UpdatePostPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>

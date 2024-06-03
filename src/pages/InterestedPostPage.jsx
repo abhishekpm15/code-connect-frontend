@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Post from "@/components/Post";
 import Saved from "../assets/saved.svg";
+import Interest from "../assets/interest.svg";
 import Skeletons from "@/components/Skeletons";
 
 const InterestedPostPage = () => {
@@ -30,7 +31,7 @@ const InterestedPostPage = () => {
         console.log("fetch err", err);
         setScreenLoad(false);
       });
-  }, []);
+  }, [URL]);
 
   return (
     <div>
@@ -43,7 +44,7 @@ const InterestedPostPage = () => {
           {interestedPosts.length > 0 ? (
             <div className="text-3xl font-semibold mt-16 flex justify-center items-center ml-16 pl-5 ">
               <div>
-              Saved
+              Interested
                 <span className="bg-blue-300 text-black ml-2 p-2 mr-2 rounded-lg  decoration-black px-3 py-1">
                    Posts
                 </span>
@@ -65,13 +66,12 @@ const InterestedPostPage = () => {
               ) : (
                 <>
                   <div className="text-3xl mt-24 font-semibold">
-                    You
+                    You don't have any
                     <span className="bg-green-300 font-semibold text-black ml-2 mr-2 rounded-lg px-3 py-1">
-                      haven't saved
+                      Interested Posts
                     </span>
-                    any posts yet.
                     <div className="flex justify-center mt-10">
-                      <img src={Saved} className="w-96" />
+                      <img src={Interest} className="w-[550px]" />
                     </div>
                   </div>
                 </>

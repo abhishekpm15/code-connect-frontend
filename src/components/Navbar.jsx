@@ -78,7 +78,7 @@ const Navbar = ({ setIsModalOpen }) => {
             <li
               className={`${
                 currentLink === "home" ? "bg-[#4f46e5] text-white" : ""
-              } hover:bg-[#4f46e5] font-semibold px-2 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10`}
+              } hover:bg-[#4f46e5] border  font-semibold px-2 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10`}
               onClick={() => {
                 navigate("/home");
                 // window.location.reload();
@@ -86,23 +86,20 @@ const Navbar = ({ setIsModalOpen }) => {
             >
               Home
             </li>
-            <li className="hover:bg-[#4f46e5] font-semibold px-2 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10">
+            <li  className="hover:bg-[#4f46e5] border font-semibold px-2 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10">
               Chats
             </li>
             <li
               className={`${
                 currentLink === "posts/create" ? "bg-[#4f46e5] text-white" : ""
-              } font-semibold px-2 py-1  duration-200 border-2 border-indigo-500 rounded-md cursor-pointer z-10 hover:scale-125`}
+              } font-semibold px-2 py-1 hover:bg-[#4f46e5] duration-200 border  rounded-md cursor-pointer z-10 hover:scale-125`}
               onClick={() => {
                 navigate("/posts/create");
               }}
             >
-              <button>Add Post</button>
+              Add Post
             </li>
           </ul>
-          <div>
-            <ModeToggle />
-          </div>
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -182,6 +179,9 @@ const Navbar = ({ setIsModalOpen }) => {
                 </DropdownMenuContent>
               )}
             </DropdownMenu>
+          </div>
+          <div>
+            <ModeToggle />
           </div>
         </div>
 
