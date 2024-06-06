@@ -17,11 +17,11 @@ const LearnCarousal = () => {
   const { theme } = useContext(ThemeProviderContext);
 
   return (
-    <Carousel className="">
+    <Carousel>
       <CarouselContent>
         <CarouselItem>
           <div className="p-1 w-full">
-            <div classNamew-full>
+            <div className="w-full">
               <CardContent className="p-6">
                 <div className="flex justify-evenly mt-20">
                   <div className="flex flex-col space-y-5">

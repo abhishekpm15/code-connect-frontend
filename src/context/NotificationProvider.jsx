@@ -9,6 +9,7 @@ const NotificationProvider = ({ children }) => {
   const [notification, setNotification] = useState([]);
   const { socket } = useContext(SocketContext);
   const URL = import.meta.env.VITE_BACKEND_URL;
+  
 
   useEffect(()=>{
     console.log('notification',notification);

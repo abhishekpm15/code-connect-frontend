@@ -1,11 +1,11 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
 import LearnMore from "@/components/LearnMore";
 
-const LearnMorePage = () => {
+const LearnMorePage = ({parent}) => {
+  // const parentRef = useRef(null)
   return (
-    <div className="w-full h-screen">
-      <LearnMore />
+    <div className="w-screen h-screen overflow-hidden bg-white -z-50 bg-transparent" >
+      <LearnMore parent={parent}/>
     </div>
   );
 };
