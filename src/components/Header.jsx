@@ -4,6 +4,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { FaArrowDown } from "react-icons/fa6";
+import { Button } from "./ui/button";
 
 const Header = ({ setIsModalOpen }) => {
   const gsapRefTitle = useRef();
@@ -14,7 +15,7 @@ const Header = ({ setIsModalOpen }) => {
 
   useGSAP(() => {
     tl.from(gsapRefTitle.current, {
-      marker:true,
+      marker: true,
       duration: 1,
       opacity: 0,
       y: 100,
@@ -42,42 +43,42 @@ const Header = ({ setIsModalOpen }) => {
   // }
 
   return (
-      <div className="w-full flex flex-col space-y-10 mt-32 font-customFont items-center">
-        {/* <Stars /> */}
-        <div
-          className={`text-8xl font-semibold  dark:text-white text-black`}
-          ref={gsapRefTitle}
-        >
-          Code.{" "}
-          <span className="dark:bg-blue-300  bg-blue-400 px-2 py-2 dark:text-black text-white rounded-xl">
-            Connect
-          </span>
-        </div>
-        <div
-          className="text-4xl font-medium dark:text-white/80 text-gray-600"
-          ref={gsapRefPara}
-        >
-          Where Novices Discover Solutions and Developers Earn Bounties .
-        </div>
-        <div className="flex space-x-10" ref={gsapRefBtn}>
-          <button
-            className="bg-[#2949ED] text-xl flex items-center mx-auto px-3 py-2 text-white rounded-md mt-10 hover:scale-125 cursor-pointer z-10 duration-300 dark:text-white "
-            onClick={() => {
-              setIsModalOpen(true);
-            }}
-          >
-            Get Started
-          </button>
-          <button
-            className=" text-xl flex items-center mx-auto px-3 py-2 text-black bg-white/10 backdrop-blur-3xl rounded-md mt-10 hover:scale-125 cursor-pointer z-10 duration-300 dark:text-white "
-            // onClick={() => {
-            //   smoothScrollToSecondSection();
-            // }}
-          >
-            learn more &nbsp; <FaArrowDown />
-          </button>
-        </div>
+    <div className="w-full flex flex-col space-y-10 mt-32 font-customFont items-center">
+      {/* <Stars /> */}
+      <div
+        className={`text-8xl font-semibold  dark:text-white text-black`}
+        ref={gsapRefTitle}
+      >
+        Code.{" "}
+        <span className="dark:bg-blue-300  bg-blue-400 px-2 py-2 dark:text-black text-white rounded-xl">
+          Connect
+        </span>
       </div>
+      <div
+        className="text-4xl font-medium dark:text-white/80 text-gray-600"
+        ref={gsapRefPara}
+      >
+        Where Novices Discover Solutions and Developers Earn Bounties .
+      </div>
+      <div className="flex space-x-10" ref={gsapRefBtn}>
+        {/* <button
+          className="bg-[#2949ED] text-xl flex items-center mx-auto px-3 py-2 text-white rounded-md mt-10 hover:scale-125 cursor-pointer z-10 duration-300 dark:text-white "
+          onClick={() => {
+            setIsModalOpen(true);
+          }}
+        > */}
+          <Button className="mt-10 text-xl" onClick={()=>{setIsModalOpen(true)}}> Get Started</Button>
+        {/* </button> */}
+        <button
+          className=" text-xl flex items-center mx-auto px-3 py-2 text-black bg-white/10 backdrop-blur-3xl rounded-md mt-10 hover:scale-125 cursor-pointer z-10 duration-300 dark:text-white "
+          // onClick={() => {
+          //   smoothScrollToSecondSection();
+          // }}
+        >
+          learn more <FaArrowDown className="ml-1"/>
+        </button>
+      </div>
+    </div>
   );
 };
 

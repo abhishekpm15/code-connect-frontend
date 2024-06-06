@@ -52,7 +52,7 @@ const LandingPage = () => {
           <LearnMorePage parent={gsapParentRef}/>
         </section>
         <section className="h-screen w-screen overflow-hidden" ref={gsapParentRef2}>
-          <ExplorePage parent={gsapParentRef2}/>
+          <ExplorePage parent={gsapParentRef2} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
         </section>
       </Background2>
     </div>

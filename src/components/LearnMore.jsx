@@ -14,6 +14,7 @@ const LearnMore = ({ parent }) => {
       const tl = gsap.timeline();
       tl.to(titleRef.current, {
         x: "-100%",
+        duration: 10,
         scrollTrigger: {
           trigger: parent.current,
           scroller: "body",
@@ -65,8 +66,8 @@ const LearnMore = ({ parent }) => {
       </div>
       
         <div
-          className="text-[10vw] ml-[10%] font-bold dark:text-black text-white text-nowrap" ref={titleRef2}>
-          through experience
+          className="text-[10vw] flex justify-center font-bold dark:text-black text-white text-nowrap" ref={titleRef2}>
+          through 'experience'
         </div>
       {/* </div> */}
       {/* <LearnCarousal /> */}
