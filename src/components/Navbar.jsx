@@ -27,6 +27,7 @@ const Navbar = ({ setIsModalOpen }) => {
   const location = useLocation();
   const [currentLink, setCurrentLink] = useState("");
   const { notification } = useContext(NotificationContext);
+  console.log('navbar',notification)
   useEffect(() => {
     console.log("location change", location.pathname);
     if (location.pathname === "/home") {
@@ -48,6 +49,7 @@ const Navbar = ({ setIsModalOpen }) => {
       setCurrentLink("interestedposts");
       console.log("current", currentLink);
     } else if (location.pathname === "/notifications") {
+      setCurrentLink("notifications")
       console.log("current", currentLink);
     } else {
       setCurrentLink("");
@@ -108,10 +110,10 @@ const Navbar = ({ setIsModalOpen }) => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="relative">
-                    Account{" "}
+                    Account
                     <span className="absolute left-20 -top-2">
-                      {notification > 0 && (
-                        <Badges count={notification} dot={true} />
+                      { notification.length > 0 && (
+                        <Badges count={notification.length} dot={true} />
                       )}
                     </span>
                   </Button>

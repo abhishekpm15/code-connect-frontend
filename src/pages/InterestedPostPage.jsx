@@ -65,7 +65,7 @@ const InterestedPostPage = () => {
                 </div>
               ) : (
                 <>
-                  <div className="text-3xl mt-24 font-semibold">
+                  <div className="text-3xl mt-16 font-semibold">
                     You don't have any
                     <span className="bg-green-300 font-semibold text-black ml-2 mr-2 rounded-lg px-3 py-1">
                       Interested Posts
