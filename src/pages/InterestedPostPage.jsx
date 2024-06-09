@@ -54,7 +54,7 @@ const InterestedPostPage = () => {
             ""
           )}
           <div>
-            <div className="flex justify-evenly mt-16">
+            <div className="flex justify-evenly mt-10">
               {interestedPosts.length > 0 ? (
                 <div>
                   <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-5 gap-y-7 ">

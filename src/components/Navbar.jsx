@@ -98,7 +98,7 @@ const Navbar = ({ setIsModalOpen }) => {
                   currentLink === "posts/create"
                     ? "bg-[#4f46e5] text-white"
                     : ""
-                } font-semibold px-2 py-1 hover:bg-[#4f46e5] duration-200 border  rounded-md cursor-pointer z-10 hover:scale-125`}
+                } font-semibold px-2 py-1 hover:bg-[#4f46e5] hover:text-white duration-200 border  rounded-md cursor-pointer z-10 hover:scale-125`}
                 onClick={() => {
                   navigate("/posts/create");
                 }}
@@ -109,7 +109,7 @@ const Navbar = ({ setIsModalOpen }) => {
             <div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="relative">
+                  <Button variant="outline" className="relative hover:bg-[#4f46e5] hover:text-white">
                     Account
                     <span className="absolute left-20 -top-2">
                       { notification.length > 0 && (
