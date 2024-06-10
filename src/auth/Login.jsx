@@ -9,10 +9,12 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { NotificationContext } from "@/context/NotificationProvider";
 
 const Login = ({ loginClick, setLoginClick }) => {
   const [load, setLoad] = useState(false);
   const navigate = useNavigate();
+  const {fetchNotifications} = useContext(NotificationContext)
   const URL = import.meta.env.VITE_BACKEND_URL;
   const {
     email,
@@ -45,6 +47,7 @@ const Login = ({ loginClick, setLoginClick }) => {
         console.log("res", res);
         if (res.status === 200) {
           localStorage.setItem("userInfo", JSON.stringify(res));
+          fetchNotifications();
         }
         setTimeout(() => {
           setLoad(false);
@@ -54,7 +57,7 @@ const Login = ({ loginClick, setLoginClick }) => {
       })
       .catch((err) => {
         console.log(err);
-        if (err.response.status === 401) {
+        if (err.response?.status === 401) {
           toast.error(err.response.data.message);
           setLoad(false);
         }

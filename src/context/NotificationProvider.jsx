@@ -15,54 +15,51 @@ const NotificationProvider = ({ children }) => {
     console.log("notification", notification);
   }, [notification, socket]);
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const userInfo = localStorage.getItem("userInfo");
-      const token = JSON.parse(userInfo)?.data.token;
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-      
-      try {
-        const response = await axios.get(`${URL}/notification/fetchAllNotifications`, { headers });
-        setNotification(response.data); 
-        console.log("notifications", response.data);
-      } catch (err) {
-        console.log("fetch err", err);
-      }
+  const fetchNotifications = async () => {
+    const userInfo = localStorage.getItem("userInfo");
+    const token = JSON.parse(userInfo)?.data.token;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     };
-
-    const handleGetNotification = (datas) => {
-      const userInfo = localStorage.getItem("userInfo");
-      const id = JSON.parse(userInfo).data.id;
-      console.log("id postedid", id, datas.receiverId);
-      if (id === datas.receiverId) {
-        fetchNotifications();
-        toast.info(
-          `You have new Interest notification from ${datas.senderName}`,
-          {
-            autoClose: 5000,
-            position: "top-center",
-          }
-        );
-      }
-    };
-    fetchNotifications();
-    if (socket) {
-      console.log('socket called')
-      socket.on("getNotification", handleGetNotification);
+    
+    try {
+      const response = await axios.get(`${URL}/notification/fetchAllNotifications`, { headers });
+      setNotification(response.data); 
+      console.log("notifications", response.data);
+    } catch (err) {
+      console.log("fetch err", err);
     }
-    return () => {
-      if (socket) {
-        socket.off("getNotification", handleGetNotification);
-      }
-    };
-  }, [URL, socket]);
+  };
+
+  const handleGetNotification = (datas) => {
+    const userInfo = localStorage.getItem("userInfo");
+    const id = JSON.parse(userInfo).data.id;
+    console.log("id postedid", id, datas.receiverId);
+    console.log('datas',datas)
+    if (id === datas.receiverId) {
+      fetchNotifications();
+      toast.info(
+        `You have new Interest notification from ${datas.senderName}`,
+        {
+          autoClose: 5000,
+          position: "top-center",
+        }
+      );
+    }
+  };
+
+
+  useEffect(() => {
+    fetchNotifications()
+    console.log("socket changes")
+    socket?.on("getNotification", handleGetNotification);
+  },[socket]);
 
   const values = {
     notification,
     setNotification,
+    fetchNotifications
   };
 
   return (

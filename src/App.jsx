@@ -36,7 +36,7 @@ function AppContent() {
   return (
     <>
       {
-        location.pathname !== '/' ? <Navbar /> : null 
+        location.pathname !== '/' ? <Navbar setIsModalOpen={false}/> : null 
       }
       <Routes>
         <Route path="/" element={<LandingPage />} />
