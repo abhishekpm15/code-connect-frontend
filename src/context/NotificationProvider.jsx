@@ -11,10 +11,6 @@ const NotificationProvider = ({ children }) => {
   const { socket } = useContext(SocketContext);
   const URL = import.meta.env.VITE_BACKEND_URL;
 
-  useEffect(() => {
-    console.log("notification", notification);
-  }, [notification, socket]);
-
   const fetchNotifications = async () => {
     const userInfo = localStorage.getItem("userInfo");
     const token = JSON.parse(userInfo)?.data.token;

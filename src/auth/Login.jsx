@@ -10,11 +10,13 @@ import { useNavigate } from "react-router-dom";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { NotificationContext } from "@/context/NotificationProvider";
+import { SocketContext } from "@/context/SocketProvider";
 
 const Login = ({ loginClick, setLoginClick }) => {
   const [load, setLoad] = useState(false);
   const navigate = useNavigate();
   const {fetchNotifications} = useContext(NotificationContext)
+  const {socket} = useContext(SocketContext)
   const URL = import.meta.env.VITE_BACKEND_URL;
   const {
     email,
@@ -48,6 +50,9 @@ const Login = ({ loginClick, setLoginClick }) => {
         if (res.status === 200) {
           localStorage.setItem("userInfo", JSON.stringify(res));
           fetchNotifications();
+          const userInfo = localStorage.getItem("userInfo");
+          const userId = JSON.parse(userInfo).data.id;
+          socket?.emit("newUser", userId);
         }
         setTimeout(() => {
           setLoad(false);
