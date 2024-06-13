@@ -63,7 +63,7 @@ const Navbar = ({ setIsModalOpen }) => {
   }, [data]);
 
   return (
-    <div className="w-full text-base 2xl:text-xl mt-4 z-10">
+    <div className="w-full text-base  mt-4 z-10">
       <div className={`w-full flex ${location.pathname === "/" ? "justify-between px-40" : "justify-around"} items-center rounded-3xl p-2`}>
         <div
           onClick={() => {
@@ -79,32 +79,34 @@ const Navbar = ({ setIsModalOpen }) => {
         {location.pathname !== "/" ? (
           <div className="flex items-center space-x-5 xl:space-x-7 ">
             <ul className="hidden sm:flex space-x-5 md:space-x-7 xl:space-x-10 dark:text-white text-black items-center ">
-              <li
+              <Button
+              variant="outline"
                 className={`${
                   currentLink === "home" ? "bg-[#4f46e5] text-white" : ""
-                } hover:bg-[#4f46e5] border  font-semibold px-2 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10`}
+                } hover:bg-[#4f46e5] border font-semibold px-3 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10`}
                 onClick={() => {
                   navigate("/home");
                   // window.location.reload();
                 }}
               >
                 Home
-              </li>
-              <li className="hover:bg-[#4f46e5] border font-semibold px-2 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10">
+              </Button>
+              <Button variant="outline" className="hover:bg-[#4f46e5] border font-semibold px-3 py-1 hover:text-white duration-200 rounded-md cursor-pointer z-10">
                 Chats
-              </li>
-              <li
+              </Button>
+              <Button
+              variant="outline"
                 className={`${
                   currentLink === "posts/create"
                     ? "bg-[#4f46e5] text-white"
                     : ""
-                } font-semibold px-2 py-1 hover:bg-[#4f46e5] hover:text-white duration-200 border  rounded-md cursor-pointer z-10 hover:scale-125`}
+                } font-semibold px-2 py-1 hover:bg-[#4f46e5] hover:text-white duration-200 border  rounded-md cursor-pointer z-10`}
                 onClick={() => {
                   navigate("/posts/create");
                 }}
               >
                 Add Post
-              </li>
+              </Button>
             </ul>
             <div>
               <DropdownMenu>

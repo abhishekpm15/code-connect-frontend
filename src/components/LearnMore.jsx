@@ -54,7 +54,7 @@ const LearnMore = ({ parent }) => {
 
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg">
       <div className="flex">
         <div
           className="text-[20vw] ml-[10%] font-bold dark:text-black text-white text-nowrap" ref={titleRef}>
