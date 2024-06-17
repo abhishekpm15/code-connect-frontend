@@ -45,11 +45,30 @@ const NotificationProvider = ({ children }) => {
     }
   };
 
+  const handleGetAcceptNotification = (datas) => {
+    const userInfo = localStorage.getItem("userInfo");
+    const id = JSON.parse(userInfo).data.id;
+    console.log("id postedid", id, datas.receiverId);
+    console.log('datas',datas)
+    if (id === datas.receiverId) {
+      fetchNotifications();
+      toast.info(
+        `Your request has been accepted by ${datas.senderName} for the problem ${datas.postName}`,
+        {
+          autoClose: 5000,
+          position: "top-center",
+        }
+      );
+    }
+  };
+
+
 
   useEffect(() => {
     fetchNotifications()
     console.log("socket changes")
     socket?.on("getNotification", handleGetNotification);
+    socket?.on("getAcceptNotification",handleGetAcceptNotification)
   },[socket]);
 
   const values = {
