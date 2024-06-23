@@ -154,7 +154,7 @@ const Notification = () => {
       });
       toast.success("You have accepted the request");
       setTimeout(()=>{
-        removeNotification(selectedId,selectedIndex);
+        removeNotification(selectedId,selectedIndex );
       },1000)
       setAcceptLoad(false)
     }
@@ -164,7 +164,7 @@ const Notification = () => {
     <>
       <>
         <Modal title="Profile" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={"900px"}>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-center space-x-12 items-center">
           <div className="">
             <Avatar className="w-64 h-64">
               <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -178,7 +178,7 @@ const Notification = () => {
             <div><Label className="font-semibold">Tech stacks: </Label>
             <span className="mt-2">{viewProfile.techStack?.map((tag, index) => (
                 <div
-                  className="bg-green-300 text-wrap inline mr-2 text-black font-semibold rounded-md px-2 py-1"
+                  className="bg-green-300 inline-block mt-1 mr-2 text-black font-semibold rounded-md px-2 py-1"
                   key={index}
                 >
                   {tag}
@@ -246,7 +246,10 @@ const Notification = () => {
                 <CloseCircleTwoTone className="text-xl" />
               </div>
               <div className="px-10 py-5 w-full dark:bg-white rounded-xl dark:text-black text-white bg-[#10172a]">
-                {notif?.notifications?.message}
+                {notif?.notifications?.type === 'Interest' ? notif?.notifications?.message.split("\"")[0] : ""}
+               <span className="font-bold text-blue-500"> {notif?.notifications?.type === 'Interest' ? notif?.notifications?.message.split("\"")[1] : ""}</span>
+                {notif?.notifications?.type === 'Interest' ? notif?.notifications?.message.split("\"")[2] : ""}
+                <span className="font-bold text-blue-500">{notif?.notifications?.type === 'Interest' ? notif?.notifications?.message.split("\"")[3] : ""}</span> 
               </div>
                 {isHovered === notif._id && (
                 <div className="absolute space-x-2 z-50 btn-appear w-full text-center">
