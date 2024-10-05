@@ -71,9 +71,11 @@ const Post = ({ data }) => {
           <div className="flex items-center">
             <div className="flex">Status : {data.status}</div>
             {data?.status === "open" ? (
-              <div className="w-2 h-2 ml-2 bg-green-400 rounded-full"></div>
+              <div className="w-2 h-2 ml-2 bg-green-500 rounded-full"></div>
+            ) : data?.status === "stashed" ? ( 
+              <div className="w-2 h-2 ml-2 bg-orange-300 rounded-full"></div> 
             ) : (
-              <div className="w-2 h-2 ml-2 bg-red-400 rounded-full"></div>
+              <div className="w-2 h-2 ml-2 bg-red-500 rounded-full"></div>
             )}
           </div>
           <div className="flex justify-between items-center h-14">

@@ -263,11 +263,13 @@ const ViewPost = ({ id }) => {
                 <div className="flex items-center">
                   <div className="">Status </div>
                   <div>
-                    {postSelected?.status === "open" ? (
-                      <div className="w-5  h-5 bg-green-400 rounded-full ml-2"></div>
-                    ) : (
-                      <div className="w-2 h-2 bg-red-400 rounded-full  "></div>
-                    )}
+                  {postSelected?.status === "open" ? (
+                    <div className="w-2 h-2 ml-2 bg-green-500 rounded-full"></div>
+                  ) : postSelected?.status === "stashed" ? ( 
+                    <div className="w-2 h-2 ml-2 bg-orange-300 rounded-full"></div> 
+                  ) : (
+                    <div className="w-2 h-2 ml-2 bg-red-500 rounded-full"></div>
+                  )}
                   </div>
                 </div>
               </div>
@@ -474,19 +476,24 @@ const ViewPost = ({ id }) => {
                 />
               ) : (
                 <>
-                  {interestShown ? (
-                    <Button
-                      onClick={handleInterest}
-                      className="bg-blue-600 hover:bg-blue-500 dark:text-white"
-                    >
-                      Marked as Interested
-                    </Button>
-                  ) : postSelected.postedBy?.user_id === userId ? (
-                    <> </>
-                  ) : (
-                    <Button onClick={handleInterest}>Show Interest</Button>
-                  )}
-                </>
+                {
+                  postSelected.status === 'stashed' ? (
+                  <Button className="bg-orange-500 hover:bg-orange-400 dark:text-white">
+                    Stashed Post
+                  </Button>
+                ) :
+                interestShown ? (
+                  <Button className="bg-blue-600 hover:bg-blue-500 dark:text-white">
+                    Marked as Interested
+                  </Button>
+                ) : postSelected.postedBy?.user_id === userId ? (
+                  <> </>
+                ) : (
+                  <Button onClick={handleInterest}>
+                    Show Interest
+                  </Button>
+                )}
+              </>
               )}
             </CardFooter>
           </Card>

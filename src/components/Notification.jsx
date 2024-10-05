@@ -30,6 +30,7 @@ const Notification = () => {
   const [sendToId, setSendToId] = useState();
   const [totalUserBounty, setTotalUserBounty] = useState(0);
   const { socket } = useContext(SocketContext);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     console.log("clicked noti", clickedNoti);
@@ -65,10 +66,11 @@ const Notification = () => {
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     console.log(JSON.parse(userInfo).data.token);
-    const token = JSON.parse(userInfo).data.token;
+    const userToken = JSON.parse(userInfo).data.token;
+    setToken(userToken)
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${userToken}`,
     };
   });
 
@@ -159,7 +161,12 @@ const Notification = () => {
     showModal2(true);
   };
 
-  const handleConfirm = () => {
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    setToken(JSON.parse(userInfo).data.token);
+  }, []);
+
+  const handleConfirm = async () => {
     console.log("here");
     console.log(selectedId, selectedIndex);
     setAcceptLoad(true);
@@ -178,15 +185,33 @@ const Notification = () => {
       sendToId,
       selectedPostName
     );
-    socket.emit("sendAcceptNotification", {
-      sendToUserId: sendToId,
-      userName: userName,
-      userId: userId,
-      userEmail: userEmail,
-      postID: postID,
-      postName: selectedPostName,
-    });
-    toast.success("You have accepted the request");
+    try {
+      console.log("Token check", token);
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      const res = await axios.post(
+        `${URL}/post/stashPost/${postID}`,
+        {
+          status: "closed",
+        },
+        { headers }
+      );
+      console.log("Post response", res);
+      socket.emit("sendAcceptNotification", {
+        sendToUserId: sendToId,
+        userName: userName,
+        userId: userId,
+        userEmail: userEmail,
+        postID: postID,
+        postName: selectedPostName,
+      });
+      toast.success("You have accepted the request");  
+    } catch (err) {
+      toast.error("Error updating post")
+      console.error("Error updating post", err);
+    }
     setTimeout(() => {
       removeNotification(selectedId, selectedIndex);
     }, 1000);
@@ -325,13 +350,13 @@ const Notification = () => {
           </div>
         </Modal>
       </>
-      <div className="flex w-full justify-center mt-10">
+      <div className="flex  justify-center mt-10">
         {notification.length > 0 && (
           <div className="flex flex-col items-center justify-center ">
             {notification?.map((notif, index) => (
               <div
                 key={notif._id}
-                className="relative duration-200 cursor-pointer mb-5 z-0 "
+                className="relative duration-200 cursor-pointer mb-5 z-0 w-full"
                 ref={(el) => (notificationRefs.current[index] = el)}
                 onMouseEnter={() => {
                   setIsHovered(notif._id);
