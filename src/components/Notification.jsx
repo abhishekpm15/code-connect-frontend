@@ -195,10 +195,12 @@ const Notification = () => {
         `${URL}/post/stashPost/${postID}`,
         {
           status: "closed",
+          receiverId:sendToId
         },
         { headers }
       );
       console.log("Post response", res);
+      console.log("items listed" , sendToId, userName, userId, userEmail)
       socket.emit("sendAcceptNotification", {
         sendToUserId: sendToId,
         userName: userName,
@@ -399,7 +401,7 @@ const Notification = () => {
                         variant="outline"
                         className=" rounded-lg  dark:text-white px-3 py-1"
                         onClick={() => {
-                          handleViewProfile(notif.userId);
+                          handleViewProfile(notif.notifications.sentBy);
                         }}
                       >
                         View Profile

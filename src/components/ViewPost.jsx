@@ -8,11 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Modal, Spin } from "antd";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { LoadingOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import LikeFilled from "../assets/likeFilled.png";
 import LikeUnfilled from "../assets/likeUnfilled.png";
@@ -25,7 +25,7 @@ import { FaLink } from "react-icons/fa";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 // import { useToast } from "@/components/ui/use-toast";
-
+import { Label } from "./ui/label";
 const ViewPost = ({ id }) => {
   // const { toast:Toast } = useToast()
 
@@ -42,6 +42,9 @@ const ViewPost = ({ id }) => {
   const location = useLocation();
   const { socket } = useContext(SocketContext);
   const [userId, setUserId] = useState("");
+  const [checkAcceptedBy, setCheckAcceptedBy] = useState();
+  const [acceptedUser, setAcceptedUser] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // useEffect(() => {
   //   console.log("interest between", interestShown);
@@ -91,6 +94,14 @@ const ViewPost = ({ id }) => {
     axios
       .get(`${URL}/post/getPost/${id}`, { headers })
       .then((res) => {
+        console.log("result ", res);
+        setCheckAcceptedBy(res.data.acceptedBy);
+        axios.get(`${URL}/user/getProfile/${res.data.acceptedBy.user_id}`,{headers}).then((res)=>{
+          console.log("response for user name", res)
+          setAcceptedUser(res.data);
+        }).catch((err)=>{
+          console.log(err);
+        })
         setPostSelected(res.data);
         setUserId(userId);
         setScreenLoad(false);
@@ -192,7 +203,7 @@ const ViewPost = ({ id }) => {
                   viewerID,
                   viewerName,
                   postID: id,
-                  postedBy:postSelected.postedBy
+                  postedBy: postSelected.postedBy,
                 },
                 { headers }
               )
@@ -248,8 +259,111 @@ const ViewPost = ({ id }) => {
       });
   };
 
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  // const handleViewProfile = (id) => {
+  //   setIsModalOpen(true);
+  //   // setId(id);
+  //   console.log(id);
+  //   const userInfo = localStorage.getItem("userInfo");
+  //   console.log(JSON.parse(userInfo).data.token);
+  //   const token = JSON.parse(userInfo).data.token;
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${token}`,
+  //   };
+  //   axios
+  //     .get(`${URL}/user/getProfile/${id}`, { headers })
+  //     .then((res) => {
+  //       setAcceptedUser(res.data);
+  //       console.log(res);
+  //       axios
+  //         .get(`${URL}/user/getTotalBounty/${id}`, { headers })
+  //         .then((res) => {
+  //           console.log("res bounty", res);
+  //           // setTotalUserBounty(res.data.totalBounty);
+  //         })
+  //         .catch((err) => {
+  //           console.log("fetch err", err);
+  //         });
+  //     })
+  //     .catch((err) => {
+  //       console.log("fetch err", err);
+  //     });
+  // };
+
   return (
     <div className="pb-20">
+      <Modal
+        title="Profile"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={"900px"}
+      >
+        <div className="flex justify-center space-x-12 items-center">
+          <div className="">
+            <Avatar className="w-64 h-64">
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <div>
+              <Label className="font-semibold">Username: </Label>
+              {acceptedUser?.username}
+            </div>
+            <div>
+              <Label className="font-semibold">Email: </Label>
+              {acceptedUser?.email}
+            </div>
+            <div>
+              <Label className="font-semibold">Description: </Label>
+              {acceptedUser?.bio}
+            </div>
+            <div>
+              <Label className="font-semibold">Tech stacks: </Label>
+              <span className="mt-2">
+                {acceptedUser?.techStack?.map((tag, index) => (
+                  <div
+                    className="bg-green-300 inline-block mt-1 mr-2 text-black font-semibold rounded-md px-2 py-1"
+                    key={index}
+                  >
+                    {tag}
+                  </div>
+                ))}
+              </span>
+            </div>
+            <div>
+              <Label className="font-semibold">
+                Solved ✅: {acceptedUser?.completedPosts?.length}
+              </Label>
+            </div>
+            <div>
+              <Label className="font-semibold">
+                Success rate %:{" "}
+                {(acceptedUser?.completedPosts?.length * 100) /
+                  acceptedUser?.interestedPosts?.length}
+              </Label>
+            </div>
+            <div>
+              <Label className="font-semibold">
+                {/* Total earnings: {totalUserBounty} */}
+              </Label>
+            </div>
+            <div>
+              <Label className="font-semibold">
+                {/* Acheivements: {totalUserBounty}{" "} */}
+              </Label>
+            </div>
+          </div>
+        </div>
+      </Modal>
       {screenLoad ? (
         <>
           <LargeSkeletons />
@@ -263,13 +377,13 @@ const ViewPost = ({ id }) => {
                 <div className="flex items-center">
                   <div className="">Status </div>
                   <div>
-                  {postSelected?.status === "open" ? (
-                    <div className="w-2 h-2 ml-2 bg-green-500 rounded-full"></div>
-                  ) : postSelected?.status === "stashed" ? ( 
-                    <div className="w-2 h-2 ml-2 bg-orange-300 rounded-full"></div> 
-                  ) : (
-                    <div className="w-2 h-2 ml-2 bg-red-500 rounded-full"></div>
-                  )}
+                    {postSelected?.status === "open" ? (
+                      <div className="w-2 h-2 ml-2 bg-green-500 rounded-full"></div>
+                    ) : postSelected?.status === "stashed" ? (
+                      <div className="w-2 h-2 ml-2 bg-orange-300 rounded-full"></div>
+                    ) : (
+                      <div className="w-2 h-2 ml-2 bg-red-500 rounded-full"></div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -431,11 +545,27 @@ const ViewPost = ({ id }) => {
                     {saved ? "Unsave" : "Save"}
                   </Button>
                   <div className="flex items-center">
+                    {checkAcceptedBy?.isAccepted && (
+                      <div>
+                        <Button
+                          className="bg-cyan-400 hover:bg-cyan-600"
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          Post Accepted by &nbsp;
+                          <span className="font-semibold">
+                            {acceptedUser?.username}
+                          </span>
+                        </Button>
+                      </div>
+                    )}
+
                     {like
                       ? postSelected.postedBy?.user_id !== userId && (
                           <button
                             // className="bg-black dark:bg-white p-2 rounded-lg hover:scale-125 duration-150"
-                            className="hover:scale-125 duration-200"
+                            className="hover:scale-125 duration-200 ml-2"
                             onClick={handleLike}
                           >
                             <FavoriteIcon fontSize="medium" />
@@ -448,7 +578,7 @@ const ViewPost = ({ id }) => {
                         )
                       : postSelected.postedBy?.user_id !== userId && (
                           <button
-                            className="hover:scale-125 duration-200"
+                            className="hover:scale-125 duration-200 ml-2"
                             // className="dark:bg-white p-2 rounded-lg hover:scale-125 duration-150 "
                             onClick={handleLike}
                           >
@@ -476,24 +606,24 @@ const ViewPost = ({ id }) => {
                 />
               ) : (
                 <>
-                {
-                  postSelected.status === 'stashed' ? (
-                  <Button className="bg-orange-500 hover:bg-orange-400 dark:text-white">
-                    Stashed Post
-                  </Button>
-                ) :
-                interestShown ? (
-                  <Button className="bg-blue-600 hover:bg-blue-500 dark:text-white">
-                    Marked as Interested
-                  </Button>
-                ) : postSelected.postedBy?.user_id === userId ? (
-                  <> </>
-                ) : (
-                  <Button onClick={handleInterest}>
-                    Show Interest
-                  </Button>
-                )}
-              </>
+                  {postSelected.status === "stashed" ? (
+                    <Button className="bg-orange-500 hover:bg-orange-400 dark:text-white">
+                      Stashed Post
+                    </Button>
+                  ) : postSelected.status === "closed" ? (
+                    <Button className="bg-red-500 hover:bg-red-400 dark:text-white">
+                      Closed Post
+                    </Button>
+                  ) : interestShown ? (
+                    <Button className="bg-blue-600 hover:bg-blue-500 dark:text-white">
+                      Marked as Interested
+                    </Button>
+                  ) : postSelected.postedBy?.user_id === userId ? (
+                    <> </>
+                  ) : (
+                    <Button onClick={handleInterest}>Show Interest</Button>
+                  )}
+                </>
               )}
             </CardFooter>
           </Card>

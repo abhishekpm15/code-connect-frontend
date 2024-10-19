@@ -22,6 +22,7 @@ const Post = ({ data }) => {
   const [btn, setBtn] = useState(false);
   const [likes, setLikes] = useState(data.likes.length);
   const { socket } = useContext(SocketContext);
+  console.log("data" ,data)
 
   useEffect(() => {
     const handleGetLike = (datas) => {
@@ -127,7 +128,7 @@ const Post = ({ data }) => {
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
-          {btn ? (
+          {btn  && data?.status === "open" ? (
             <Button
               className="w-full"
               onClick={() => {
