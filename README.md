@@ -94,7 +94,7 @@ https://github.com/user-attachments/assets/88562c4a-1a54-4ce0-a6a0-f28e8e48a093
 
 ### After creating a new Post ⬇️
 
-<img width="1466" alt="Screenshot 2024-11-02 at 1 27 48 PM" src="https://github.com/user-attachments/assets/a9b79366-d9dd-46df-99d3-28fea2604f9e">
+<img width="1466" alt="Screenshot 2024-11-02 at 1 46 27 PM" src="https://github.com/user-attachments/assets/722a8109-2818-41f8-a1e7-244004577d5c">
 
 ## 🔴 Stuffs you can do / Instructions :
 Developers can `SAVE` ,`UPDATE` `SHOW INTEREST`, `LIKE` any community post.
