@@ -97,10 +97,10 @@ const Post = ({ data }) => {
                 <CardDescription className="flex space-x-3">
                   {data.description.tags.map((tag, index) => (
                     <div
-                      className="bg-green-300 text-black font-semibold rounded-md px-2 py-1"
+                      className="bg-green-300 text-black font-semibold rounded-md px-2 py-1 w-24"
                       key={index}
                     >
-                      {tag}
+                      {tag.substring(0,8)}
                     </div>
                   ))}
                 </CardDescription>
