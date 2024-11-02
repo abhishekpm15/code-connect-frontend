@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export const SearchContext = createContext();
 
@@ -17,6 +18,10 @@ const SearchProvider = ({ children }) => {
   },[searchValue])
 
   const handleSubmit = (e) =>{
+    if(searchValue === ''){
+      toast.error("Search must not be empty !")
+      return;
+    }
     e.preventDefault()
     setSearched(true)
     console.log("search value change", searchValue);

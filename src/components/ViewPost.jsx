@@ -555,7 +555,8 @@ const ViewPost = ({ id }) => {
                         >
                           Post Accepted by &nbsp;
                           <span className="font-semibold">
-                            {acceptedUser?.username}
+                            { JSON.parse(localStorage.getItem("userInfo")).data.id === acceptedUser?._id ? "You" : 
+                              acceptedUser?.username}
                           </span>
                         </Button>
                       </div>
