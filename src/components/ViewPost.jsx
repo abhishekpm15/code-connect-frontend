@@ -96,12 +96,17 @@ const ViewPost = ({ id }) => {
       .then((res) => {
         console.log("result ", res);
         setCheckAcceptedBy(res.data.acceptedBy);
-        axios.get(`${URL}/user/getProfile/${res.data.acceptedBy.user_id}`,{headers}).then((res)=>{
-          console.log("response for user name", res)
-          setAcceptedUser(res.data);
-        }).catch((err)=>{
-          console.log(err);
-        })
+        axios
+          .get(`${URL}/user/getProfile/${res.data.acceptedBy.user_id}`, {
+            headers,
+          })
+          .then((res) => {
+            console.log("response for user name", res);
+            setAcceptedUser(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         setPostSelected(res.data);
         setUserId(userId);
         setScreenLoad(false);
@@ -264,6 +269,10 @@ const ViewPost = ({ id }) => {
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const solveIssue = () => {
+    console.log("Solve issue");
   };
 
   // const handleViewProfile = (id) => {
@@ -545,22 +554,39 @@ const ViewPost = ({ id }) => {
                     {saved ? "Unsave" : "Save"}
                   </Button>
                   <div className="flex items-center">
-                    {checkAcceptedBy?.isAccepted && (
-                      <div>
-                        <Button
-                          className="bg-cyan-400 hover:bg-cyan-600"
-                          onClick={() => {
-                            setIsModalOpen(true);
-                          }}
-                        >
-                          Post Accepted by &nbsp;
-                          <span className="font-semibold">
-                            { JSON.parse(localStorage.getItem("userInfo")).data.id === acceptedUser?._id ? "You" : 
-                              acceptedUser?.username}
-                          </span>
-                        </Button>
-                      </div>
-                    )}
+                    {checkAcceptedBy?.isAccepted &&
+                      JSON.parse(localStorage.getItem("userInfo")).data.id !==
+                        acceptedUser?._id && (
+                        <div>
+                          <Button
+                            className="bg-cyan-400 hover:bg-cyan-600"
+                            onClick={() => {
+                              setIsModalOpen(true);
+                            }}
+                          >
+                            Post Accepted by &nbsp;
+                            <span className="font-semibold">
+                              {JSON.parse(localStorage.getItem("userInfo")).data
+                                .id === acceptedUser?._id
+                                ? "You"
+                                : acceptedUser?.username}
+                            </span>
+                          </Button>
+                        </div>
+                      )}
+
+                    {checkAcceptedBy?.isAccepted &&
+                      JSON.parse(localStorage.getItem("userInfo")).data.id ===
+                        acceptedUser?._id && (
+                        <div>
+                          <Button
+                            className="bg-purple-600 hover:bg-purple-400"
+                            onClick={solveIssue}
+                          >
+                            Solve Issue
+                          </Button>
+                        </div>
+                      )}
 
                     {like
                       ? postSelected.postedBy?.user_id !== userId && (
