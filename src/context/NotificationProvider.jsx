@@ -18,10 +18,13 @@ const NotificationProvider = ({ children }) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
-    
+
     try {
-      const response = await axios.get(`${URL}/notification/fetchAllNotifications`, { headers });
-      setNotification(response.data); 
+      const response = await axios.get(
+        `${URL}/notification/fetchAllNotifications`,
+        { headers }
+      );
+      setNotification(response.data);
       console.log("notifications", response.data);
     } catch (err) {
       console.log("fetch err", err);
@@ -32,7 +35,7 @@ const NotificationProvider = ({ children }) => {
     const userInfo = localStorage.getItem("userInfo");
     const id = JSON.parse(userInfo).data.id;
     console.log("id postedid", id, datas.receiverId);
-    console.log('datas',datas)
+    console.log("datas", datas);
     if (id === datas.receiverId) {
       fetchNotifications();
       toast.info(
@@ -49,7 +52,7 @@ const NotificationProvider = ({ children }) => {
     const userInfo = localStorage.getItem("userInfo");
     const id = JSON.parse(userInfo).data.id;
     console.log("id postedid", id, datas.receiverId);
-    console.log('datas',datas)
+    console.log("datas", datas);
     if (id === datas.receiverId) {
       fetchNotifications();
       toast.info(
@@ -62,19 +65,17 @@ const NotificationProvider = ({ children }) => {
     }
   };
 
-
-
   useEffect(() => {
-    fetchNotifications()
-    console.log("socket changes")
+    fetchNotifications();
+    console.log("socket changes");
     socket?.on("getNotification", handleGetNotification);
-    socket?.on("getAcceptNotification",handleGetAcceptNotification)
-  },[socket]);
+    socket?.on("getAcceptNotification", handleGetAcceptNotification);
+  }, [socket]);
 
   const values = {
     notification,
     setNotification,
-    fetchNotifications
+    fetchNotifications,
   };
 
   return (

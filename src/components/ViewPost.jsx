@@ -24,6 +24,11 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { FaLink } from "react-icons/fa";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ChatPNG from "../assets/chat.png";
+import ContactMailPNG from "../assets/contact-mail.png";
+import NotionPNG from "../assets/notion.png";
+import GoogleMeetPNG from "../assets/google-meet.png";
+
 // import { useToast } from "@/components/ui/use-toast";
 import { Label } from "./ui/label";
 const ViewPost = ({ id }) => {
@@ -45,7 +50,8 @@ const ViewPost = ({ id }) => {
   const [checkAcceptedBy, setCheckAcceptedBy] = useState();
   const [acceptedUser, setAcceptedUser] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [postCreatedBy, setPostCreatedBy] = useState('');
+  const [isSolveModal, setIsSolveModal] = useState(false);
   // useEffect(() => {
   //   console.log("interest between", interestShown);
   // }, [interestShown]);
@@ -111,6 +117,7 @@ const ViewPost = ({ id }) => {
         setUserId(userId);
         setScreenLoad(false);
         console.log(res);
+        setPostCreatedBy(res.data)
         console.log("fetch post id", res.data.savedBy);
         setSavedBy(res.data.savedBy);
         if (res.data.likes.length > 0) {
@@ -271,9 +278,55 @@ const ViewPost = ({ id }) => {
     setIsModalOpen(false);
   };
 
+  const solveHandleOk = () => {
+    setIsSolveModal(false);
+  };
+  const solveHandleCancel = () => {
+    setIsSolveModal(false);
+  };
+
   const solveIssue = () => {
     console.log("Solve issue");
+    setIsSolveModal(true)
   };
+
+  useEffect(()=>{
+    console.log("socket");
+  },[socket,toast])
+  
+  const solvedIssue = () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const token = userInfo?.data?.token;
+    const userId = userInfo?.data?.user?._id; // Current user ID
+  
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    console.log("userID " + userId);
+    console.log("post ID " + id)
+    axios
+      .post(
+        `${URL}/post/postSolved/${id}`, // Pass post ID in the URL
+        { userId }, // Include current user ID in the payload
+        { headers }
+      )
+      .then((res) => {
+        socket.emit("sendIssueSolvedNotification", {
+          currentUser: userInfo?.data?.user,
+          postedUser: postCreatedBy?.postedBy,
+        });
+        console.log(res);
+        toast.success("Issue Solved Successfully");
+        setIsSolveModal(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response?.data?.message || "Something went wrong!");
+      });
+  };
+  
+
 
   // const handleViewProfile = (id) => {
   //   setIsModalOpen(true);
@@ -308,6 +361,61 @@ const ViewPost = ({ id }) => {
 
   return (
     <div className="pb-20">
+    <Modal
+        title="Solve Issue Methods"
+        open={isSolveModal}
+        onOk={solveHandleOk}
+        onCancel={solveHandleCancel}
+        width={"600px"}
+      >
+        <div className="flex space-x-12 items-center mt-5">
+          <div className="flex flex-col space-y-6">
+
+            <div>
+              <div className="font-semibold bg-slate-300 rounded-lg p-2 flex gap-3 w-1/2"><img src={ContactMailPNG} width={20}/>Contact </div>
+                <div className="flex flex-col mt-3 space-y-2">
+                  <div>
+                    <Label className="font-semibold">Email: <span className="font-normal">&nbsp;{postCreatedBy?.postedBy?.user?.email}</span> </Label>
+                  </div>
+                  <div>
+                    <Label className="font-semibold">Phone: <span className="font-normal">&nbsp;8248775195</span></Label>
+                  </div>
+                </div>
+            </div> 
+
+            <div>
+              <div className="font-semibold bg-slate-300 rounded-lg p-2 flex gap-3 w-1/2"><img src={ChatPNG} width={18}/>One-One Chat</div>
+              <div className="flex items-center mt-3 space-x-2 space">
+                <FaLink />
+                 <a><div className="text-black/50 font-normal rounded-md">node-chat-app.vercel</div></a>
+              </div>
+              <div className="font-semibold mt-2">Room Code:  <span className="font-normal text-black/50"> {postCreatedBy?.postedBy?.user?.username.toLowerCase().split(" ").join("")}-{acceptedUser?.username?.toLowerCase().split(" ").join("")}-your_password</span></div>
+            </div>
+
+            <div>
+            <div className="font-semibold bg-slate-300 rounded-lg p-2 flex gap-3 w-1/2"><img src={GoogleMeetPNG} width={20}/>Google Meet </div>
+            <div className="flex items-center mt-3 space-x-2 space">
+                <FaLink />
+                 <a><div className=" text-black/50 font-normal rounded-md">node-chat-app.vercel</div></a>
+              </div>            
+            </div>
+
+            <div>
+            <div className="font-semibold bg-slate-300 rounded-lg p-2 flex gap-3 w-1/2"><img src={NotionPNG} width={23}/>Notion </div>
+              <div className="flex items-center mt-3 space-x-2 space">
+                <FaLink />
+                 <a><div className=" text-black/50 font-normal rounded-md">node-chat-app.vercel</div></a>
+              </div>            
+            </div>
+            
+          </div>
+          
+        </div>
+        <div className="mt-5">
+          <Button className="bg-black text-white hover:bg-gray-600"onClick={solvedIssue}>Solved</Button>
+        </div>
+      </Modal>
+
       <Modal
         title="Profile"
         open={isModalOpen}
@@ -554,7 +662,7 @@ const ViewPost = ({ id }) => {
                     {saved ? "Unsave" : "Save"}
                   </Button>
                   <div className="flex items-center">
-                    {checkAcceptedBy?.isAccepted &&
+                    {postSelected?.status !== "completed" && checkAcceptedBy?.isAccepted &&
                       JSON.parse(localStorage.getItem("userInfo")).data.id !==
                         acceptedUser?._id && (
                         <div>
@@ -575,18 +683,47 @@ const ViewPost = ({ id }) => {
                         </div>
                       )}
 
-                    {checkAcceptedBy?.isAccepted &&
+                      {postSelected?.status === "completed" && checkAcceptedBy?.isAccepted &&
+                      JSON.parse(localStorage.getItem("userInfo")).data.id !==
+                        acceptedUser?._id && (
+                        <div>
+                          <Button
+                            className="bg-cyan-400 hover:bg-cyan-600"
+                            onClick={() => {
+                              setIsModalOpen(true);
+                            }}
+                          >
+                            Post completed by &nbsp;
+                            <span className="font-semibold">
+                              {JSON.parse(localStorage.getItem("userInfo")).data
+                                .id === acceptedUser?._id
+                                ? "You"
+                                : acceptedUser?.username}
+                            </span>
+                          </Button>
+                        </div>
+                      )}
+
+
+                    {postSelected?.status !== "completed" && checkAcceptedBy?.isAccepted &&
                       JSON.parse(localStorage.getItem("userInfo")).data.id ===
                         acceptedUser?._id && (
                         <div>
                           <Button
-                            className="bg-purple-600 hover:bg-purple-400"
+                            className="bg-purple-400 hover:bg-purple-600"
                             onClick={solveIssue}
                           >
                             Solve Issue
                           </Button>
                         </div>
                       )}
+
+                      {
+                        postSelected?.status === "completed" && checkAcceptedBy?.isAccepted &&
+                          <div className="bg-red-600 p-2 px-3 rounded-lg dark:text-white ml-3">
+                            Closed
+                          </div>
+                      }
 
                     {like
                       ? postSelected.postedBy?.user_id !== userId && (
@@ -633,22 +770,22 @@ const ViewPost = ({ id }) => {
                 />
               ) : (
                 <>
-                  {postSelected.status === "stashed" ? (
+                  {postSelected.status === "stashed" &&  postSelected?.status !== "completed"? (
                     <Button className="bg-orange-500 hover:bg-orange-400 dark:text-white">
                       Stashed Post
                     </Button>
-                  ) : postSelected.status === "closed" ? (
+                  ) : postSelected.status === "closed" &&  postSelected?.status !== "completed"? (
                     <Button className="bg-red-500 hover:bg-red-400 dark:text-white">
                       Closed Post
                     </Button>
-                  ) : interestShown ? (
+                  ) : interestShown &&  postSelected?.status !== "completed" ? (
                     <Button className="bg-blue-600 hover:bg-blue-500 dark:text-white">
                       Marked as Interested
                     </Button>
                   ) : postSelected.postedBy?.user_id === userId ? (
                     <> </>
                   ) : (
-                    <Button onClick={handleInterest}>Show Interest</Button>
+                    postSelected?.status !== "completed" && <Button onClick={handleInterest}>Show Interest</Button>
                   )}
                 </>
               )}
